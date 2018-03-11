@@ -40,6 +40,9 @@ captures/
 .idea/dictionaries
 .idea/libraries
 
+# Sensetive data
+.value/google_maps_api.xml
+
 # Keystore files
 *.jks
 
