@@ -7,6 +7,8 @@ import android.support.v4.content.ContextCompat;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import demo.technology.chorus.chorusdemo.view.BaseLocationActivity;
+
 public class MapsActivity extends BaseLocationActivity {
 
     @Override
