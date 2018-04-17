@@ -4,7 +4,17 @@ package demo.technology.chorus.chorusdemo.smartcontractintegration;
 //https://ethereum.stackexchange.com/questions/3514/how-to-call-a-contract-method-using-the-eth-call-json-rpc-api
 
 public class SmartContractConstants {
-        public static String CONTRACT_ADDRESS = "";
+
+        public static String CONTRACT_ADDRESS_MAIN = "";
+        public static String CONTRACT_ADDRESS_RINKEBY = "";
+        public static String CONTRACT_ADDRESS_ROPSTEN = "";
+
+        public static String CONTRACT_METHOD_ADDRESS_GET_RATE_MAIN = "";
+        public static String CONTRACT_METHOD_ADDRESS_GET_RATE_RINKEBY = "";
         public static String CONTRACT_METHOD_ADDRESS_GET_RATE = "";
-        public static String CONTRACT_METHOD_ADDRESS_POST_RATE = "";
+
+        public static String CONTRACT_METHOD_ADDRESS_POST_RATE_MAIN = "";
+        public static String CONTRACT_METHOD_ADDRESS_POST_RATE_RINKEBY = "";
+        public static String CONTRACT_METHOD_ADDRESS_POST_RATE_ROPSTEN = "";
+
 }
