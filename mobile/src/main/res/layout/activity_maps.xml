@@ -1,8 +1,94 @@
-<fragment android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="demo.technology.chorus.chorusdemo.MapsActivity" />
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_horizontal"
+    android:background="@color/map_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:gravity="center"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="@color/white_opacity_18"
+        android:lineSpacingExtra="4sp"
+        android:onClick="onAddressClick"
+        android:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF"
+        tools:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF"
+        />
+
+    <FrameLayout android:id="@+id/mapContainer"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        tools:context="demo.technology.chorus.chorusdemo.view.main.MapsActivity" />
+
+    <com.github.lzyzsd.circleprogress.ArcProgress
+        android:id="@+id/arc_progress"
+        android:background="@color/map_background"
+        android:layout_marginTop="30dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        custom:arc_progress="89"
+        custom:arc_bottom_text="out of 100"/>
+
+    <FrameLayout android:id="@+id/statContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="32dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="32dp"
+        android:minHeight="120dp"
+        tools:context="demo.technology.chorus.chorusdemo.view.main.MapsActivity" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <SeekBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progressDrawable="@drawable/custom_progress"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:minHeight="50dp"
+            android:maxHeight="50dp"
+            android:shape="oval"
+            android:splitTrack="false"
+            android:progress="0"
+            android:max="100"
+            android:thumb="@mipmap/ellipse_2"
+            android:thumbOffset="6dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/hintTextView"
+            android:textColor="#ffffff"
+            android:lineSpacingExtra="24sp"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
+            tools:text="SLIDE TO END RIDE"
+            android:text="SLIDE TO END RIDE"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+
+</LinearLayout>

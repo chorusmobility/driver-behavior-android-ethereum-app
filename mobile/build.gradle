@@ -6,10 +6,11 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "chorus.technology.chorusdemo"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 27
         versionCode 1
         versionName "0.01"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -28,7 +29,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'androidx.core:core-ktx:0.2'
+    implementation 'androidx.core:core-ktx:0.3'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.tc.seekbar:library:0.2.+'
 
     //Support
     implementation "com.android.support:appcompat-v7:$support"
@@ -49,10 +52,13 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:$play_services"
     implementation "com.google.android.gms:play-services-location:$play_services"
 
+    //Custom UI
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
+
     //Tests
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     //Wear Devices
     wearApp project(':wear')

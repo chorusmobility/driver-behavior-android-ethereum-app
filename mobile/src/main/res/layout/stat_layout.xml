@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:background="@android:color/transparent" >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/aggressiveTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="-8sp"
+            android:textColor="#de88b7"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            android:text="7"
+            tools:text="7" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="4sp"
+            android:text="Aggressive Acceleration"
+            android:textColor="@color/white_opacity_46"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            tools:text="Aggressive Acceleration" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/excessiveSpeedingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="-8sp"
+            android:textColor="#e8be9b"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            android:text="4"
+            tools:text="4" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="4sp"
+            android:text="Excessive Speeding"
+            android:textColor="@color/white_opacity_46"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            tools:text="Excessive Speeding" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/hardBreakingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="-8sp"
+            android:textColor="#3abfb4"
+            android:textSize="20sp"
+            android:text="5"
+            android:textStyle="normal"
+            tools:text="0" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="4sp"
+            android:text="Hard Breaking"
+            android:textColor="@color/white_opacity_46"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            tools:text="Hard Breaking" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/phoneUsageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="-8sp"
+            android:textColor="#3ca3cf"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            android:text="10"
+            tools:text="10" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="4sp"
+            android:text="Phone Usage"
+            android:textColor="@color/white_opacity_46"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            tools:text="Phone Usage" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

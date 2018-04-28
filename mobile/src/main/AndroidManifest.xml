@@ -25,7 +25,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".view.main.MapsActivity"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,6 +33,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".view.LoginActivity"
+            android:label="@string/title_activity_login"/>
 
         <meta-data
             android:name="com.google.android.gms.car.application"
@@ -50,9 +54,7 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".view.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+
     </application>
 
 </manifest>

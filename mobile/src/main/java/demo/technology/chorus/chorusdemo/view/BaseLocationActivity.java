@@ -21,7 +21,7 @@ import com.google.android.gms.tasks.Task;
  * Created by Peter on 11.03.2018.
  */
 
-public class BaseLocationActivity extends FragmentActivity implements OnMapReadyCallback {
+public abstract class BaseLocationActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final String VALUE_ZOOM = "zoom";
     private static final int PERMISSIONS_REQUEST_LOCATION = 1005;
@@ -93,7 +93,11 @@ public class BaseLocationActivity extends FragmentActivity implements OnMapReady
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
+
+        setMapMode();
     }
+
+    public abstract void setMapMode();
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
