@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<resources>-->
+
+    <transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
+        <changeImageTransform/>
+    </transitionSet>
+
+    <!--<slide xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:slideEdge="right"-->
+        <!--android:duration="1000">-->
+
+        <!--<targets>-->
+            <!--&lt;!&ndash; if using a custom Toolbar container, specify the ID of the AppBarLayout &ndash;&gt;-->
+            <!--&lt;!&ndash;<target android:excludeId="@id/app_bar_layout" />&ndash;&gt;-->
+            <!--<target android:excludeId="@android:id/statusBarBackground"/>-->
+            <!--<target android:excludeId="@android:id/navigationBarBackground"/>-->
+        <!--</targets>-->
+
+    <!--</slide>-->
+
+<!--</resources>-->

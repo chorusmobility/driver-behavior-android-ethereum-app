@@ -1,9 +1,13 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinatorLayout"
+    xmlns:custom="http://schemas.android.com/apk/res-auto">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:background="@color/map_background"
     android:orientation="vertical">
@@ -19,27 +23,67 @@
         android:gravity="center"
         android:fontFamily="sans-serif"
         android:textStyle="normal"
+        android:lineSpacingExtra="1.3sp"
         android:textColor="@color/white_opacity_18"
-        android:lineSpacingExtra="4sp"
         android:onClick="onAddressClick"
+        android:longClickable="false"
+        android:transitionName="wallet"
         android:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF"
         tools:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF"
         />
 
     <FrameLayout android:id="@+id/mapContainer"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="188.3dp"
         tools:context="demo.technology.chorus.chorusdemo.view.main.MapsActivity" />
 
-    <com.github.lzyzsd.circleprogress.ArcProgress
-        android:id="@+id/arc_progress"
-        android:background="@color/map_background"
-        android:layout_marginTop="30dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <FrameLayout
+        android:paddingTop="42dp"
+        android:id="@+id/ratingContainer"
         android:layout_gravity="center_horizontal"
-        custom:arc_progress="89"
-        custom:arc_bottom_text="out of 100"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/rainbow_view"
+            android:layout_gravity="center_horizontal"
+            android:src="@mipmap/rainbow_grey"
+            android:transitionName="rainbow"
+            android:layout_width="209dp"
+            android:layout_height="126.7dp" />
+
+        <TextView
+            android:id="@+id/ratingTextView"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="53.3sp"
+            android:fontFamily="sans-serif"
+            android:transitionName="rating"
+            android:textStyle="normal"
+            android:textColor="#ffffff"
+            android:lineSpacingExtra="-29.3sp"
+            android:gravity="center_horizontal"
+            tools:text="9.9"
+            />
+
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="#ffffff"
+        android:lineSpacingExtra="10sp"
+        android:transitionName="ratingof"
+        android:gravity="center_horizontal"
+        android:text="Out of 10"
+        tools:text="Out of 10"
+        />
+
+
 
     <FrameLayout android:id="@+id/statContainer"
         android:layout_width="match_parent"
@@ -92,3 +136,4 @@
 
 
 </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

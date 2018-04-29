@@ -1,0 +1,19 @@
+package demo.technology.chorus.chorusdemo.integration.etherscan;
+
+//Get ERC20-Token Account Balance for TokenContractAddress
+//https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0x57d90b64a1a57749b0f932f1a3395792e12e7055&address=0xe04f27eb70e025b78871a2ad7eabe85e61212761&tag=latest&apikey=YourApiKeyToken
+//Alternative curl -X POST --data '{"jsonrpc":"2.0","method":"eth_call","params":[{"to": "0x86fa049857e0209aa7d9e616f7eb3b3b78ecfdb0", "data":"0x70a082310000000000000000000000000b88516a6d22bf8e0d3657effbd41577c5fd4cb7"}, "latest"],"id":67}' -H "Content-Type: application/json" http://127.0.0.1:8545/
+
+public class EtherScanConstants {
+    private static final String HTTPS_API_ETHERSCAN_IO_API_MODULE = "https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=";
+    private static final String ADDRESS = "&address=";
+    private static final String TAG_LATEST_APIKEY = "&tag=latest&apikey=";
+    private static String ETHER_SCAN_API_KEY = "EDEN486IK6XY87ZI4J6X5VU1FDQ1CZ9UEK";
+    private static String ETHER_TOKEN_WALLET = "0x0000000000000000000000000000000000000000";
+    private static String ETHER_TOKEN_ADDRESS = "0xd26114cd6EE289AccF82350c8d8487fedB8A0C07";
+
+    public static String getEtherScanLink(){
+        return HTTPS_API_ETHERSCAN_IO_API_MODULE + ETHER_TOKEN_ADDRESS + ADDRESS + ETHER_TOKEN_WALLET +
+                TAG_LATEST_APIKEY + ETHER_SCAN_API_KEY;
+    }
+}

@@ -1,6 +1,6 @@
 package demo.technology.chorus.chorusdemo.model;
 
-import static demo.technology.chorus.chorusdemo.EthConstants.GWEI;
+import static demo.technology.chorus.chorusdemo.integration.EthConstants.GWEI;
 
 public class EtherScanResponse {
     public String status;
@@ -33,7 +33,12 @@ public class EtherScanResponse {
     }
 
     public Double getResult() {
-        return result == null ? 0 : (Double.parseDouble(result) / GWEI);
+        try {
+            return result == null ? 0 : (Double.parseDouble(result) / GWEI);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return -1d;
+        }
     }
 
     public void setResult(String result) {

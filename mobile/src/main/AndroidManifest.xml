@@ -33,7 +33,8 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_maps"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"></activity>
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".view.login.LoginActivity"
@@ -47,7 +48,9 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_settings"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+
+        </activity>
 
         <activity
             android:name=".view.login.RegisterWalletActivity"

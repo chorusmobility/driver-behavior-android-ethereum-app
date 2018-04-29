@@ -1,4 +1,7 @@
 <resources>
 
+    <dimen name="wallet_text_extra_spacing">1.3sp</dimen>
+    <dimen name="wallet_text_padding_bottom">25.3dp</dimen>
+    <dimen name="wallet_text_text_size">12sp</dimen>
 
 </resources>

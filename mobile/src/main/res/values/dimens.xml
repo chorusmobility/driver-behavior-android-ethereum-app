@@ -27,5 +27,7 @@
 
 
     <!-- SETTINGS -->
+    <dimen name="wallet_text_extra_spacing">1.3sp</dimen>
+    <dimen name="wallet_text_padding_bottom">25.3dp</dimen>
 
 </resources>

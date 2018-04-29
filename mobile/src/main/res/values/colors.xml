@@ -3,8 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
     <color name="white_opacity_7">#12FFFFFF</color>
     <color name="white_opacity_18">#2Effffff</color>
     <color name="white_opacity_46">#78ffffff</color>
     <color name="map_background">#1c2c42</color>
+
+    <color name="divider_color">#425062</color>
 </resources>

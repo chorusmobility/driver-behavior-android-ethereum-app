@@ -10,14 +10,18 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import demo.technology.chorus.chorusdemo.etherscan.EtherScanConstants;
-import demo.technology.chorus.chorusdemo.infura.InfuraConstants;
+import demo.technology.chorus.chorusdemo.integration.etherscan.EtherScanConstants;
+import demo.technology.chorus.chorusdemo.integration.infura.InfuraConstants;
 import demo.technology.chorus.chorusdemo.model.EtherScanResponse;
 import demo.technology.chorus.chorusdemo.processing.OkHttpRequestProcessing;
+import demo.technology.chorus.chorusdemo.service.events.ShowMessageEvent;
+import demo.technology.chorus.chorusdemo.utils.ChorusTextUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -82,16 +86,10 @@ public class ChorusApp extends MultiDexApplication {
             public void onResponse(Call call, Response response) throws IOException {
                 String responseBody = response.body().string();
                 final EtherScanResponse etherScanResponse = new Gson().fromJson(responseBody, EtherScanResponse.class);
-                final NumberFormat formatter = new DecimalFormat("#0.0000");
 
                 if (etherScanResponse != null) {
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(instance, "Balance of 0x0 Ether Wallet with OmiseGo Token is " +
-                                    formatter.format(etherScanResponse.getResult()), Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    EventBus.getDefault().post(new ShowMessageEvent("Balance of 0x0 Ether Wallet with OmiseGo Token is " +
+                                    ChorusTextUtils.formatDouble4(etherScanResponse.getResult()) + " OMG"));
                 }
             }
         });

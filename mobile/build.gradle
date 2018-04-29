@@ -32,6 +32,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:0.3'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.tc.seekbar:library:0.2.+'
+    implementation 'org.greenrobot:eventbus:3.1.1'
 
     //Support
     implementation "com.android.support:appcompat-v7:$support"

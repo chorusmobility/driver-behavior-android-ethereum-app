@@ -1,17 +1,34 @@
 package demo.technology.chorus.chorusdemo.view.settings;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 
 import demo.technology.chorus.chorusdemo.R;
+import demo.technology.chorus.chorusdemo.view.base.BaseAddressActivity;
 
-public class SettingsActivity extends FragmentActivity {
+public class SettingsActivity extends BaseAddressActivity {
+
+    @Override
+    public void openOnSwipeAction() {
+
+    }
+
+    @Override
+    public void initSwipeBar() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
     }
 
+
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        NavUtils.navigateUpFromSameTask(this);
+//    }
 }

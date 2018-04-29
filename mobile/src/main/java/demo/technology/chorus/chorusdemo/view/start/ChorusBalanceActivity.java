@@ -3,19 +3,19 @@ package demo.technology.chorus.chorusdemo.view.start;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.util.Pair;
-import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
-import demo.technology.chorus.chorusdemo.R;
-import demo.technology.chorus.chorusdemo.vibrator.Vibration;
-import demo.technology.chorus.chorusdemo.view.main.MapsActivity;
 
-public class ChorusBalanceActivity extends FragmentActivity {
+import demo.technology.chorus.chorusdemo.DataManager;
+import demo.technology.chorus.chorusdemo.R;
+import demo.technology.chorus.chorusdemo.utils.ChorusTextUtils;
+import demo.technology.chorus.chorusdemo.view.base.BaseAddressActivity;
+import demo.technology.chorus.chorusdemo.view.main.MapsActivity;
+import demo.technology.chorus.chorusdemo.view.settings.SettingsActivity;
+
+public class ChorusBalanceActivity extends BaseAddressActivity {
 
     private ImageView rainBowImageView;
     private TextView rainBowTextView;
@@ -25,45 +25,37 @@ public class ChorusBalanceActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_balance_main);
+        initView();
         initSeekBar();
         initFragments(savedInstanceState);
+
     }
 
-    private void initSeekBar() {
-        SeekBar seekBar = (SeekBar) findViewById(R.id.progressBar);
-        final TextView hintTextView = (TextView) findViewById(R.id.hintTextView);
-        //seekBar.setScaleY(3f);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+    private void initView() {
+        hintTextView = findViewById(R.id.hintTextView);
+        seekBar = findViewById(R.id.progressBar);
+        rainBowImageView = findViewById(R.id.rainbow_view);
+        rainBowTextView = findViewById(R.id.ratingTextView);
+        addressTextView = findViewById(R.id.walletTextView);
+        TextView welcomeTextView = findViewById(R.id.welcomeText);
+        addressTextView.setText(DataManager.getInstance().getUserModel().getWallet().getAddress());
+        welcomeTextView.setText(ChorusTextUtils.getWelcomeText() + ", " +
+                DataManager.getInstance().getUserModel().getPrivateInfo().getName() + "!\nYour score is:");
+        rainBowTextView.setText(ChorusTextUtils.formatDouble1(DataManager.getInstance().getRatingModel().getMainDriverRating()));
+    }
 
-            }
+    @Override
+    public void openOnSwipeAction() {
+        startActivity(new Intent(ChorusBalanceActivity.this, MapsActivity.class),
+                ActivityOptionsCompat.makeSceneTransitionAnimation(ChorusBalanceActivity.this,
+                        generatePairFromView(rainBowImageView),
+                        generatePairFromView(rainBowTextView),
+                        generatePairFromView(addressTextView)).toBundle());
+    }
 
-            private void processFinishState() {
-                Vibration.getInstance().vibrate();
-                startActivity(new Intent(ChorusBalanceActivity.this, MapsActivity.class),
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(ChorusBalanceActivity.this,
-                                generatePairFromView(rainBowImageView),
-                                generatePairFromView(rainBowTextView),
-                                generatePairFromView(addressTextView)).toBundle());
-            }
+    @Override
+    public void initSwipeBar() {
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                hintTextView.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                if (seekBar.getProgress() != 100) {
-                    seekBar.setProgress(0);
-                } else {
-                    processFinishState();
-                    seekBar.setProgress(0);
-                }
-                hintTextView.setVisibility(View.VISIBLE);
-            }
-        });
     }
 
     private void initFragments(Bundle savedInstanceState) {
@@ -73,7 +65,13 @@ public class ChorusBalanceActivity extends FragmentActivity {
         }
     }
 
-    private Pair<View, String> generatePairFromView(View view) {
-        return Pair.create(view, ViewCompat.getTransitionName(view));
+    public void onSettingsSelected(View view) {
+        startActivity(new Intent(ChorusBalanceActivity.this, SettingsActivity.class),
+                ActivityOptionsCompat.makeSceneTransitionAnimation(ChorusBalanceActivity.this,
+                        generatePairFromView(addressTextView)).toBundle());
+    }
+
+    public void onBlockchainShowSelected(View view) {
+        openWalletData();
     }
 }
