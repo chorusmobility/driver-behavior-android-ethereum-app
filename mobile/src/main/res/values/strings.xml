@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">ChorusDemo</string>
-    <string name="title_activity_maps">OnMap</string>
+    <string name="title_activity_maps">Chorus trip</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_chorus_main">Chorus balance screen</string>
+    <string name="title_activity_wallet">Chorus wallet generation</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

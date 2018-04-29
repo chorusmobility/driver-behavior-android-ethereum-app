@@ -1,6 +1,9 @@
 package demo.technology.chorus.chorusdemo.view.main;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -17,6 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
 import demo.technology.chorus.chorusdemo.R;
+import demo.technology.chorus.chorusdemo.vibrator.Vibration;
 import demo.technology.chorus.chorusdemo.view.BaseLocationActivity;
 
 public class MapsActivity extends BaseLocationActivity {
@@ -30,28 +34,28 @@ public class MapsActivity extends BaseLocationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_maps);
+        initSeekBar();
+        initMap(initFragments(savedInstanceState));
+    }
 
+    private void initSeekBar() {
         SeekBar seekBar = (SeekBar) findViewById(R.id.progressBar);
         final TextView hintTextView = (TextView) findViewById(R.id.hintTextView);
         //seekBar.setScaleY(3f);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                if (progress == 100) {
-//                    processFinishState();
-//                    seekBar.setProgress(0);
-//                }
+
             }
 
             private void processFinishState() {
-                Toast.makeText(MapsActivity.this, "Stopped!", Toast.LENGTH_LONG).show();
+                Vibration.getInstance().vibrate();
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                //hintTextView.setVisibility(View.GONE);
+                hintTextView.setVisibility(View.GONE);
             }
 
             @Override
@@ -65,7 +69,9 @@ public class MapsActivity extends BaseLocationActivity {
                 hintTextView.setVisibility(View.VISIBLE);
             }
         });
+    }
 
+    private SupportMapFragment initFragments(Bundle savedInstanceState) {
         SupportMapFragment supportMapFragment = null;
 
         if (savedInstanceState == null) {
@@ -77,27 +83,35 @@ public class MapsActivity extends BaseLocationActivity {
             supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentByTag("Map");
         }
+        return supportMapFragment;
+    }
 
+    private void initMap(SupportMapFragment supportMapFragment) {
         mLocationPermissionGranted = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         mFusedLocationProviderClient = LocationServices
                 .getFusedLocationProviderClient(this);
 
-        supportMapFragment.getMapAsync(this);
-
         if (!mLocationPermissionGranted) {
             // Permission is not granted. need to show permission ask dialog
             requestFineLocationPermission();
         }
+
+        supportMapFragment.getMapAsync(this);
     }
 
     public void onAddressClick(View view) {
-        try {
-            startActivity(new Intent(Intent.ACTION_VIEW).setData(
-                    Uri.parse("https://etherscan.io/address/" + ((TextView) view).getText().toString())));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            startActivity(new Intent(Intent.ACTION_VIEW).setData(
+//                    Uri.parse("https://etherscan.io/address/" + ((TextView) view).getText().toString())));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Chorus Token Wallet Address", ((TextView) view).getText());
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(MapsActivity.this, "Address copied into clipboard", Toast.LENGTH_LONG).show();
     }
 
 }

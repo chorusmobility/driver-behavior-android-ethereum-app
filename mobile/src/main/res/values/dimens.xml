@@ -2,4 +2,30 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- TRIP -->
+    <dimen name="stat_horizontal_margin">32dp</dimen>
+    <dimen name="text_address">12sp</dimen>
+    <dimen name="text_score">41.7sp</dimen>
+    <dimen name="text_outof">11sp</dimen>
+    <dimen name="text_slider">14sp</dimen>
+    <dimen name="text_stat_name">10.7sp</dimen>
+    <dimen name="text_stat_value">26.7sp</dimen>
+    <dimen name="map_height">188.3dp</dimen>
+    <dimen name="rating_radius">52dp</dimen>
+    <dimen name="slider_height">52.3dp</dimen>
+    <dimen name="rainbow_height">99dp</dimen>
+    <dimen name="rainbow_width">157.7dp</dimen>
+
+
+    <!-- TRIP -->
+    <dimen name="text_hello_size">23.3sp</dimen>
+    <dimen name="text_view_on_blockchain">23.3sp</dimen>
+    <dimen name="slide_to_new_ride">14sp</dimen>
+    <dimen name="settings_text">14sp</dimen>
+    <dimen name="tokens_text_size">14sp</dimen>
+
+
+    <!-- SETTINGS -->
+
 </resources>

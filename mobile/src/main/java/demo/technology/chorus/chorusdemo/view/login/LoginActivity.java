@@ -1,4 +1,4 @@
-package demo.technology.chorus.chorusdemo.view;
+package demo.technology.chorus.chorusdemo.view.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
