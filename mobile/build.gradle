@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.tc.seekbar:library:0.2.+'
     implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'com.github.zcweng:switch-button:0.0.3@aar'
 
     //Support
     implementation "com.android.support:appcompat-v7:$support"
