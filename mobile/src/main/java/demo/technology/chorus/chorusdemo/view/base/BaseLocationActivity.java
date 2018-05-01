@@ -61,6 +61,8 @@ public abstract class BaseLocationActivity extends BaseAddressActivity implement
                                         currentLatLng, DEFAULT_ZOOM);
                                 mMap.moveCamera(updatePosition);
                             }
+
+                            setMapMode();
                         }
                     }
                 });
@@ -93,8 +95,6 @@ public abstract class BaseLocationActivity extends BaseAddressActivity implement
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
-
-        setMapMode();
     }
 
     public abstract void setMapMode();

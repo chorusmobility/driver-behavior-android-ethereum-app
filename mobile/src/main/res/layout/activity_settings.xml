@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout android:id="@+id/coordinatorLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/map_background"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:animateLayoutChanges="true"
+    android:background="@color/map_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,8 +16,8 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:onClick="goBack"
+            android:orientation="horizontal"
             android:paddingTop="16dp">
 
             <ImageView
@@ -153,10 +154,10 @@
 
                 <ImageView
                     android:id="@+id/chooseNetwork"
-                    android:layout_gravity="center_vertical|right"
-                    android:src="@mipmap/shape_10_copy_13_2_copy_4"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    android:src="@mipmap/shape_10_copy_13_2_copy_4" />
 
             </FrameLayout>
 
@@ -193,15 +194,14 @@
                     android:textStyle="normal" />
 
                 <com.suke.widget.SwitchButton
-                    android:layout_gravity="center_vertical|right"
-                    app:sb_checked="false"
-                    app:sb_show_indicator="false"
-                    app:sb_checked_color="#27B894"
-                    app:sb_uncheckcircle_color="#40536C"
                     android:id="@+id/switch_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|right"
+                    app:sb_checked="false"
+                    app:sb_checked_color="#27B894"
+                    app:sb_show_indicator="false"
+                    app:sb_uncheckcircle_color="#40536C" />
 
 
             </FrameLayout>

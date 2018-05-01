@@ -1,139 +1,138 @@
-<android.support.design.widget.CoordinatorLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout android:id="@+id/coordinatorLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinatorLayout"
-    xmlns:custom="http://schemas.android.com/apk/res-auto">
+    android:animateLayoutChanges="true">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:background="@color/map_background"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:paddingTop="18dp"
-        android:paddingBottom="18dp"
-        android:paddingRight="16dp"
-        android:paddingLeft="16dp"
-        android:gravity="center"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:lineSpacingExtra="1.3sp"
-        android:textColor="@color/white_opacity_18"
-        android:onClick="onAddressClick"
-        android:longClickable="false"
-        android:transitionName="wallet"
-        android:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF"
-        tools:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF"
-        />
-
-    <FrameLayout android:id="@+id/mapContainer"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="188.3dp"
-        tools:context="demo.technology.chorus.chorusdemo.view.main.MapsActivity" />
-
-    <FrameLayout
-        android:paddingTop="42dp"
-        android:id="@+id/ratingContainer"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/rainbow_view"
-            android:layout_gravity="center_horizontal"
-            android:src="@mipmap/rainbow_grey"
-            android:transitionName="rainbow"
-            android:layout_width="209dp"
-            android:layout_height="126.7dp" />
+        android:layout_height="match_parent"
+        android:background="@color/map_background"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/ratingTextView"
-            android:layout_gravity="center_horizontal|bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="53.3sp"
             android:fontFamily="sans-serif"
-            android:transitionName="rating"
+            android:gravity="center"
+            android:lineSpacingExtra="1.3sp"
+            android:longClickable="false"
+            android:onClick="onAddressClick"
+            android:paddingBottom="18dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="18dp"
+            android:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF"
+            android:textColor="@color/white_opacity_18"
+            android:textSize="12sp"
             android:textStyle="normal"
-            android:textColor="#ffffff"
-            android:lineSpacingExtra="-29.3sp"
-            android:gravity="center_horizontal"
-            tools:text="9.9"
-            />
+            android:transitionName="wallet"
+            tools:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF" />
 
-    </FrameLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:textColor="#ffffff"
-        android:lineSpacingExtra="10sp"
-        android:transitionName="ratingof"
-        android:gravity="center_horizontal"
-        android:text="Out of 10"
-        tools:text="Out of 10"
-        />
-
-
-
-    <FrameLayout android:id="@+id/statContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="32dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="32dp"
-        android:minHeight="120dp"
-        tools:context="demo.technology.chorus.chorusdemo.view.main.MapsActivity" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <SeekBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:progressDrawable="@drawable/custom_progress"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:minHeight="50dp"
-            android:maxHeight="50dp"
-            android:shape="oval"
-            android:splitTrack="false"
-            android:progress="0"
-            android:max="100"
-            android:thumb="@mipmap/ellipse_2"
-            android:thumbOffset="6dp"
+        <FrameLayout
+            android:id="@+id/mapContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="188.3dp"
+            tools:context="demo.technology.chorus.chorusdemo.view.main.MapsActivity" />
+
+        <FrameLayout
+            android:id="@+id/ratingContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="42dp">
+
+            <ImageView
+                android:id="@+id/rainbow_view"
+                android:layout_width="157.7dp"
+                android:layout_height="99dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/rainbow_grey"
+                android:transitionName="rainbow" />
+
+            <TextView
+                android:id="@+id/ratingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:textSize="41.7sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="#ffffff"
+                android:lineSpacingExtra="-22.8sp"
+                android:gravity="center_horizontal"
+                android:transitionName="rating"
+                tools:text="9.9"
+                />
+
+        </FrameLayout>
 
         <TextView
-            android:id="@+id/hintTextView"
-            android:textColor="#ffffff"
-            android:lineSpacingExtra="24sp"
-            android:focusableInTouchMode="false"
-            android:focusable="false"
-            tools:text="SLIDE TO END RIDE"
-            android:text="SLIDE TO END RIDE"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:text="Out of 10"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="#ffffff"
+            android:transitionName="ratingof"
+            android:lineSpacingExtra="7.8sp"
+            android:gravity="center_horizontal"
+            tools:text="Out of 10"
+            />
 
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/statContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="120dp"
+            android:paddingBottom="32dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="32dp"
+            tools:context="demo.technology.chorus.chorusdemo.view.main.MapsActivity" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <SeekBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginTop="8dp"
+                android:max="100"
+                android:maxHeight="50dp"
+                android:minHeight="50dp"
+                android:progress="0"
+                android:progressDrawable="@drawable/custom_progress"
+                android:shape="oval"
+                android:splitTrack="false"
+                android:thumb="@mipmap/ellipse_2"
+                android:thumbOffset="6dp" />
+
+            <TextView
+                android:id="@+id/hintTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:lineSpacingExtra="24sp"
+                android:text="SLIDE TO END RIDE"
+                android:textColor="#ffffff"
+                tools:text="SLIDE TO END RIDE" />
+
+        </FrameLayout>
 
 
-</LinearLayout>
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

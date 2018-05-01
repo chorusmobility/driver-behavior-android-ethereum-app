@@ -5,10 +5,13 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
 import demo.technology.chorus.chorusdemo.DataManager;
@@ -22,7 +25,7 @@ public class MapsActivity extends BaseLocationActivity {
     public void openOnSwipeAction() {
         //STOP TRIP
         //OPEN START SCREEN WITH DIALOG
-        finish();
+        closeActivity();
     }
 
     @Override
@@ -35,6 +38,15 @@ public class MapsActivity extends BaseLocationActivity {
     public void setMapMode() {
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle_night));
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().
+                target(mMap.getCameraPosition().target).
+                tilt(69).
+                zoom(17).
+                bearing(0).
+                build();
+
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     @Override
@@ -44,11 +56,6 @@ public class MapsActivity extends BaseLocationActivity {
         initSeekBar();
         initMap(initFragments(savedInstanceState));
         initWalletView();
-        ((TextView)findViewById(R.id.ratingTextView)).setText(ChorusTextUtils.formatDouble1(DataManager.getInstance().getRatingModel().getMainDriverRating()));
-
-        ((TextView)findViewById(R.id.ratingTextView)).setText(ChorusTextUtils.formatDouble1(DataManager.getInstance().getRatingModel().getMainDriverRating()));
-        ((TextView)findViewById(R.id.ratingTextView)).setText(ChorusTextUtils.formatDouble1(DataManager.getInstance().getRatingModel().getMainDriverRating()));
-        ((TextView)findViewById(R.id.ratingTextView)).setText(ChorusTextUtils.formatDouble1(DataManager.getInstance().getRatingModel().getMainDriverRating()));
         ((TextView)findViewById(R.id.ratingTextView)).setText(ChorusTextUtils.formatDouble1(DataManager.getInstance().getRatingModel().getMainDriverRating()));
     }
 
@@ -81,6 +88,12 @@ public class MapsActivity extends BaseLocationActivity {
         supportMapFragment.getMapAsync(this);
     }
 
+    @Override
+    public void onBackPressed() {
 
+    }
 
+    public void closeActivity() {
+        super.onBackPressed();
+    }
 }

@@ -2,7 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,88 +48,85 @@
             tools:text="Good morning, Will!\n Your score is: " />
 
         <FrameLayout
-            android:paddingTop="42dp"
             android:id="@+id/ratingContainer"
-            android:layout_gravity="center_horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="42dp">
 
             <ImageView
                 android:id="@+id/rainbow_view"
+                android:layout_width="209dp"
+                android:layout_height="126.7dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@mipmap/rainbow_grey"
-                android:transitionName="rainbow"
-                android:layout_width="209dp"
-                android:layout_height="126.7dp" />
+                android:transitionName="rainbow" />
 
             <TextView
                 android:id="@+id/ratingTextView"
-                android:layout_gravity="center_horizontal|bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="53.3sp"
+                android:layout_gravity="center_horizontal|bottom"
                 android:fontFamily="sans-serif"
-                android:transitionName="rating"
-                android:textStyle="normal"
-                android:textColor="#ffffff"
-                android:lineSpacingExtra="-29.3sp"
                 android:gravity="center_horizontal"
-                tools:text="9.9"
-                />
+                android:lineSpacingExtra="-29.3sp"
+                android:textColor="#ffffff"
+                android:textSize="53.3sp"
+                android:textStyle="normal"
+                android:transitionName="rating"
+                tools:text="9.9" />
 
         </FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
             android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="#ffffff"
-            android:lineSpacingExtra="10sp"
-            android:transitionName="ratingof"
             android:gravity="center_horizontal"
+            android:lineSpacingExtra="10sp"
             android:text="Out of 10"
-            tools:text="Out of 10"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:textColor="#b31d2831"
             android:textSize="14sp"
-            android:paddingTop="19dp"
-            android:fontFamily="sans-serif"
             android:textStyle="normal"
-            android:textColor="#ffffff"
-            android:lineSpacingExtra="10sp"
-            android:gravity="center_horizontal"
-            android:drawableRight="@mipmap/layer_2"
-            android:drawablePadding="6dp"
-            android:text="or 990 Tokens"
-            tools:text="or 990 Tokens"
-            />
+            android:transitionName="ratingof"
+            tools:text="Out of 10" />
 
         <TextView
-            android:onClick="onBlockchainShowSelected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="52.3dp"
-            android:paddingBottom="56dp"
-            android:textSize="23.3sp"
+            android:drawablePadding="6dp"
+            android:drawableRight="@mipmap/layer_2"
             android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="#6199e3"
-            android:lineSpacingExtra="0.7sp"
             android:gravity="center_horizontal"
+            android:lineSpacingExtra="10sp"
+            android:paddingTop="19dp"
+            android:text="or 990 Tokens"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            tools:text="or 990 Tokens" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:drawablePadding="8.3dp"
-            android:text="View on Blockchain"
             android:drawableRight="@mipmap/layer_0_copy"
-            tools:text="View on Blockchain"
-            />
+            android:fontFamily="sans-serif"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="0.7sp"
+            android:onClick="onBlockchainShowSelected"
+            android:paddingBottom="56dp"
+            android:paddingTop="52.3dp"
+            android:text="View on Blockchain"
+            android:textColor="#6199e3"
+            android:textSize="23.3sp"
+            android:textStyle="normal"
+            tools:text="View on Blockchain" />
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="visible">
 
             <SeekBar
                 android:id="@+id/progressBar"
@@ -177,11 +175,10 @@
             android:paddingBottom="32dp"
             android:paddingTop="31dp"
             android:text="SETTINGS"
-            android:textColor="#ffffff"
+            android:textColor="#b31d2831"
             android:textSize="14sp"
             android:textStyle="normal"
             tools:text="SETTINGS" />
-
-
     </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>
