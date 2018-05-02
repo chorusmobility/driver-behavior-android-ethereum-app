@@ -20,12 +20,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:lineSpacingExtra="-8sp"
+            android:text="7"
+            android:background="@drawable/circle_background"
             android:textColor="#de88b7"
             android:textSize="20sp"
             android:textStyle="normal"
-            android:text="7"
             tools:text="7" />
 
         <TextView
@@ -34,9 +35,10 @@
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="4sp"
+            android:paddingTop="12dp"
             android:text="Aggressive Acceleration"
             android:textColor="@color/white_opacity_46"
-            android:textSize="16sp"
+            android:textSize="10.7sp"
             android:textStyle="normal"
             tools:text="Aggressive Acceleration" />
 
@@ -55,9 +57,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:lineSpacingExtra="-8sp"
             android:textColor="#e8be9b"
+
+            android:background="@drawable/circle_background"
             android:textSize="20sp"
             android:textStyle="normal"
             android:text="4"
@@ -68,10 +72,11 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
+            android:paddingTop="12dp"
             android:lineSpacingExtra="4sp"
             android:text="Excessive Speeding"
             android:textColor="@color/white_opacity_46"
-            android:textSize="16sp"
+            android:textSize="10.7sp"
             android:textStyle="normal"
             tools:text="Excessive Speeding" />
 
@@ -91,9 +96,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:lineSpacingExtra="-8sp"
             android:textColor="#3abfb4"
+
+            android:background="@drawable/circle_background"
             android:textSize="20sp"
             android:text="5"
             android:textStyle="normal"
@@ -105,9 +112,10 @@
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="4sp"
+            android:paddingTop="12dp"
             android:text="Hard Breaking"
             android:textColor="@color/white_opacity_46"
-            android:textSize="16sp"
+            android:textSize="10.7sp"
             android:textStyle="normal"
             tools:text="Hard Breaking" />
 
@@ -127,7 +135,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:gravity="center_horizontal"
+            android:gravity="center"
+
+            android:background="@drawable/circle_background"
             android:lineSpacingExtra="-8sp"
             android:textColor="#3ca3cf"
             android:textSize="20sp"
@@ -142,8 +152,9 @@
             android:gravity="center_horizontal"
             android:lineSpacingExtra="4sp"
             android:text="Phone Usage"
+            android:paddingTop="12dp"
             android:textColor="@color/white_opacity_46"
-            android:textSize="16sp"
+            android:textSize="10.7sp"
             android:textStyle="normal"
             tools:text="Phone Usage" />
 

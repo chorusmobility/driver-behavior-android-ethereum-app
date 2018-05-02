@@ -13,26 +13,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/walletTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:lineSpacingExtra="1.3sp"
-            android:longClickable="false"
-            android:onClick="onAddressClick"
-            android:paddingBottom="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="18dp"
-            android:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF"
-            android:textColor="@color/white_opacity_18"
-            android:textSize="12sp"
-            android:textStyle="normal"
-            android:transitionName="wallet"
-            tools:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF" />
-
-        <TextView
             android:id="@+id/welcomeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,13 +65,14 @@
             android:gravity="center_horizontal"
             android:lineSpacingExtra="10sp"
             android:text="Out of 10"
-            android:textColor="#b31d2831"
+            android:textColor="@color/white_opacity_70"
             android:textSize="14sp"
             android:textStyle="normal"
             android:transitionName="ratingof"
             tools:text="Out of 10" />
 
         <TextView
+            android:id="@+id/balanceText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawablePadding="6dp"
@@ -138,8 +119,8 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginTop="8dp"
                 android:max="100"
-                android:maxHeight="50dp"
-                android:minHeight="50dp"
+                android:maxHeight="52.3dp"
+                android:minHeight="52.3dp"
                 android:progress="0"
                 android:progressDrawable="@drawable/custom_progress_green"
                 android:shape="oval"
@@ -157,6 +138,7 @@
                 android:focusableInTouchMode="false"
                 android:gravity="center"
                 android:lineSpacingExtra="24sp"
+                android:textSize="@dimen/text_address"
                 android:text="SLIDE TO START RIDE"
                 android:textColor="#ffffff"
                 tools:text="SLIDE TO START RIDE" />
@@ -170,15 +152,36 @@
             android:layout_gravity="center_horizontal"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_horizontal"
-            android:lineSpacingExtra="10sp"
+            android:lineSpacingExtra="@dimen/settings_text_extra_spacing"
             android:onClick="onSettingsSelected"
             android:paddingBottom="32dp"
             android:paddingTop="31dp"
             android:text="SETTINGS"
-            android:textColor="#b31d2831"
-            android:textSize="14sp"
+            android:textColor="@color/white_opacity_70"
+            android:textSize="@dimen/settings_text_size"
             android:textStyle="normal"
             tools:text="SETTINGS" />
+
+        <TextView
+            android:id="@+id/walletTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/wallet_text_extra_spacing"
+            android:longClickable="false"
+            android:onClick="onAddressClick"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="18dp"
+            android:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF"
+            android:textColor="@color/white_opacity_18"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            android:transitionName="wallet"
+            tools:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF" />
     </LinearLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

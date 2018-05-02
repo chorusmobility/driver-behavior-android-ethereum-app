@@ -200,8 +200,9 @@
                     android:layout_gravity="center_vertical|right"
                     app:sb_checked="false"
                     app:sb_checked_color="#27B894"
-                    app:sb_show_indicator="false"
-                    app:sb_uncheckcircle_color="#40536C" />
+                    app:sb_uncheck_color="#DE40536C"
+                    app:sb_background="#DE40536C"
+                    app:sb_show_indicator="false" />
 
 
             </FrameLayout>
@@ -282,6 +283,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/walletTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
@@ -295,7 +297,7 @@
             android:paddingTop="16dp"
             android:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF"
             android:textColor="@color/white_opacity_18"
-            android:textSize="@dimen/wallet_text_text_size"
+            android:textSize="12sp"
             android:textStyle="normal"
             android:transitionName="wallet"
             tools:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF" />

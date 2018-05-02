@@ -20,6 +20,7 @@ import demo.technology.chorus.chorusdemo.integration.etherscan.EtherScanConstant
 import demo.technology.chorus.chorusdemo.integration.infura.InfuraConstants;
 import demo.technology.chorus.chorusdemo.model.EtherScanResponse;
 import demo.technology.chorus.chorusdemo.processing.OkHttpRequestProcessing;
+import demo.technology.chorus.chorusdemo.service.events.BalanceUpdateEvent;
 import demo.technology.chorus.chorusdemo.service.events.ShowMessageEvent;
 import demo.technology.chorus.chorusdemo.utils.ChorusTextUtils;
 import okhttp3.Call;
@@ -35,8 +36,29 @@ public class ChorusApp extends MultiDexApplication {
         super.onCreate();
         instance = this;
         dataManager = DataManager.getInstance();
+
         testInfuraRequest();
-        testTokenBalanceEtherScan();
+        //testTokenBalanceEtherScan();
+    }
+
+    public String nameOfScreen() {
+        // return 1.0 if it's MDPI
+        // return 1.5 if it's HDPI
+        // return 2.0 if it's XHDPI
+        // return 3.0 if it's XXHDPI
+        // return 4.0 if it's XXXHDPI
+        float density = getResources().getDisplayMetrics().density;
+        if (density == 1.0f) {
+            return "mdpi";
+        } else if (density == 1.5f){
+            return "hdpi";
+        } else if (density == 2.0f) {
+            return "xhdpi";
+        } else if (density == 3.0f) {
+            return "xxhdpi";
+        } else if (density == 4.0f) {
+            return "xxxhdpi";
+        } else return density + "";
     }
 
     public static ChorusApp getInstance() {
@@ -75,7 +97,7 @@ public class ChorusApp extends MultiDexApplication {
         });
     }
 
-    private void testTokenBalanceEtherScan() {
+    public void testTokenBalanceEtherScan() {
         OkHttpRequestProcessing.runGet(EtherScanConstants.getEtherScanLink(), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -88,8 +110,10 @@ public class ChorusApp extends MultiDexApplication {
                 final EtherScanResponse etherScanResponse = new Gson().fromJson(responseBody, EtherScanResponse.class);
 
                 if (etherScanResponse != null) {
-                    EventBus.getDefault().post(new ShowMessageEvent("Balance of 0x0 Ether Wallet with OmiseGo Token is " +
-                                    ChorusTextUtils.formatDouble4(etherScanResponse.getResult()) + " OMG"));
+                    EventBus.getDefault().post(new BalanceUpdateEvent(etherScanResponse.getResult()));
+                    //EventBus.getDefault().post(new ShowMessageEvent("Screen is " + nameOfScreen()));
+                   // EventBus.getDefault().post(new ShowMessageEvent("Balance of 0x0 Ether Wallet with OmiseGo Token is " +
+                    //                ChorusTextUtils.formatDouble4(etherScanResponse.getResult()) + " OMG"));
                 }
             }
         });

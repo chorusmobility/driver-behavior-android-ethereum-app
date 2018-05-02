@@ -14,8 +14,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import demo.technology.chorus.chorusdemo.DataManager;
 import demo.technology.chorus.chorusdemo.R;
+import demo.technology.chorus.chorusdemo.service.events.BalanceUpdateEvent;
 import demo.technology.chorus.chorusdemo.utils.ChorusTextUtils;
 import demo.technology.chorus.chorusdemo.view.base.BaseLocationActivity;
 
@@ -53,10 +57,12 @@ public class MapsActivity extends BaseLocationActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        ((TextView)findViewById(R.id.walletTextView)).setText(DataManager.getInstance().getUserModel().getWallet().getAddress());
         initSeekBar();
         initMap(initFragments(savedInstanceState));
         initWalletView();
         ((TextView)findViewById(R.id.ratingTextView)).setText(ChorusTextUtils.formatDouble1(DataManager.getInstance().getRatingModel().getMainDriverRating()));
+
     }
 
     private SupportMapFragment initFragments(Bundle savedInstanceState) {
@@ -96,4 +102,5 @@ public class MapsActivity extends BaseLocationActivity {
     public void closeActivity() {
         super.onBackPressed();
     }
+
 }

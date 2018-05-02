@@ -3,4 +3,42 @@
     <dimen name="text_size_xlarge">24sp</dimen>
     <dimen name="text_size_large">18sp</dimen>
 
+
+    <dimen name="wallet_text_text_size">16sp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">20dp</dimen>
+    <dimen name="activity_vertical_margin">20dp</dimen>
+
+    <!-- TRIP -->
+    <dimen name="stat_horizontal_margin">42.65dp</dimen>
+    <dimen name="text_address">16sp</dimen>
+    <dimen name="text_score">55.59sp</dimen>
+    <dimen name="text_outof">14.66sp</dimen>
+    <dimen name="text_slider">18.66sp</dimen>
+
+    <dimen name="text_stat_name">14.23sp</dimen>
+    <dimen name="text_stat_value">35.51sp</dimen>
+    <dimen name="map_height">251dp</dimen>
+    <dimen name="rating_radius">69.16dp</dimen>
+    <dimen name="slider_height">69.56dp</dimen>
+    <dimen name="rainbow_height">131.67dp</dimen>
+    <dimen name="rainbow_width">209.74dp</dimen>
+
+    <dimen name="progress_height">66.5dp</dimen>
+
+
+    <!-- TRIP -->
+    <dimen name="text_hello_size">30.99sp</dimen>
+    <dimen name="text_view_on_blockchain">30.99sp</dimen>
+    <dimen name="slide_to_new_ride">24.82sp</dimen>
+    <dimen name="settings_text">24.82sp</dimen>
+    <dimen name="tokens_text_size">24.81sp</dimen>
+
+
+    <!-- SETTINGS -->
+    <dimen name="wallet_text_extra_spacing">1.73sp</dimen>
+    <dimen name="wallet_text_padding_bottom">33.72dp</dimen>
+    <dimen name="settings_text_extra_spacing">13.33sp</dimen>
+
 </resources>

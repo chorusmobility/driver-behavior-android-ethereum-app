@@ -31,10 +31,20 @@
         <activity
             android:name=".view.main.MapsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
             android:label="@string/title_activity_maps"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".view.base.RootActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true"
+            android:label="@string/app_demo"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
+
+
 
         <activity
             android:name=".view.login.LoginActivity"
@@ -64,13 +74,14 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_chorus_main"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
         <meta-data
             android:name="com.google.android.gms.car.application"

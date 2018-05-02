@@ -12,25 +12,6 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:lineSpacingExtra="1.3sp"
-            android:longClickable="false"
-            android:onClick="onAddressClick"
-            android:paddingBottom="18dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="18dp"
-            android:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF"
-            android:textColor="@color/white_opacity_18"
-            android:textSize="12sp"
-            android:textStyle="normal"
-            android:transitionName="wallet"
-            tools:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF" />
-
         <FrameLayout
             android:id="@+id/mapContainer"
             android:layout_width="match_parent"
@@ -46,8 +27,8 @@
 
             <ImageView
                 android:id="@+id/rainbow_view"
-                android:layout_width="157.7dp"
-                android:layout_height="99dp"
+                android:layout_width="@dimen/rainbow_width"
+                android:layout_height="@dimen/rainbow_height"
                 android:layout_gravity="center_horizontal"
                 android:src="@mipmap/rainbow_grey"
                 android:transitionName="rainbow" />
@@ -76,7 +57,7 @@
             android:text="Out of 10"
             android:fontFamily="sans-serif"
             android:textStyle="normal"
-            android:textColor="#ffffff"
+            android:textColor="@color/white_opacity_70"
             android:transitionName="ratingof"
             android:lineSpacingExtra="7.8sp"
             android:gravity="center_horizontal"
@@ -88,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="120dp"
-            android:paddingBottom="32dp"
+            android:paddingBottom="24dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingTop="32dp"
@@ -108,8 +89,8 @@
                 android:layout_marginRight="32dp"
                 android:layout_marginTop="8dp"
                 android:max="100"
-                android:maxHeight="50dp"
-                android:minHeight="50dp"
+                android:maxHeight="52dp"
+                android:minHeight="52dp"
                 android:progress="0"
                 android:progressDrawable="@drawable/custom_progress"
                 android:shape="oval"
@@ -132,6 +113,27 @@
                 tools:text="SLIDE TO END RIDE" />
 
         </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/walletTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:lineSpacingExtra="1.3sp"
+            android:longClickable="false"
+            android:onClick="onAddressClick"
+            android:paddingBottom="18dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="24dp"
+            android:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF"
+            android:textColor="@color/white_opacity_18"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            android:transitionName="wallet"
+            tools:text="0x5c5699e507463E1A234d417B7CA3399aC93bC8cF" />
 
 
     </LinearLayout>

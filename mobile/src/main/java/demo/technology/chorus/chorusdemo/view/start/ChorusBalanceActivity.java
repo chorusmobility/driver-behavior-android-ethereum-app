@@ -8,8 +8,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import demo.technology.chorus.chorusdemo.DataManager;
 import demo.technology.chorus.chorusdemo.R;
+import demo.technology.chorus.chorusdemo.service.events.BalanceUpdateEvent;
 import demo.technology.chorus.chorusdemo.utils.ChorusTextUtils;
 import demo.technology.chorus.chorusdemo.view.base.BaseAddressActivity;
 import demo.technology.chorus.chorusdemo.view.main.MapsActivity;
@@ -32,6 +36,7 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
     }
 
     private void initView() {
+        updateBalanceText();
         hintTextView = findViewById(R.id.hintTextView);
         seekBar = findViewById(R.id.progressBar);
         rainBowImageView = findViewById(R.id.rainbow_view);
@@ -74,4 +79,15 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
     public void onBlockchainShowSelected(View view) {
         openWalletData();
     }
+
+    private void updateBalanceText() {
+        Double amount = DataManager.getInstance().getUserModel().getWallet().getAmount();
+        ((TextView) findViewById(R.id.balanceText)).setText("or " + (amount == null ? 0 : ChorusTextUtils.formatDouble2(amount)) + " Tokens");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(BalanceUpdateEvent event) {
+        updateBalanceText();
+    }
+
 }
