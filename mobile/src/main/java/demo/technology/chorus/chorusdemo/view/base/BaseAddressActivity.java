@@ -28,16 +28,29 @@ public abstract class BaseAddressActivity extends FragmentActivity {
     protected TextView hintTextView;
 
     public void onAddressClick(View view) {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("Chorus Token Wallet Address", ((TextView) view).getText());
-        clipboard.setPrimaryClip(clip);
+        copyToClipBoard(((TextView) view).getText());
         EventBus.getDefault().post(new ShowMessageEvent("Address copied into clipboard"));
+    }
+
+    private void copyToClipBoard(CharSequence text) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Chorus Token Wallet Address", text);
+        clipboard.setPrimaryClip(clip);
     }
 
     public void openWalletData() {
         try {
             startActivity(new Intent(Intent.ACTION_VIEW).setData(
                     Uri.parse("https://etherscan.io/address/" + DataManager.getInstance().getUserModel().getWallet().getAddress())));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void openWalletRinkebyData() {
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW).setData(
+                    Uri.parse("https://rinkeby.etherscan.io/address/" + DataManager.getInstance().getUserModel().getWallet().getAddress() + "#tokentxns")));
         } catch (Exception e) {
             e.printStackTrace();
         }

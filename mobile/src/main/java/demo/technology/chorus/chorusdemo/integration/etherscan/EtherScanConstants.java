@@ -11,7 +11,7 @@ public class EtherScanConstants {
     private static final String TAG_LATEST_APIKEY = "&tag=latest&apikey=";
     private static String ETHER_SCAN_API_KEY = "EDEN486IK6XY87ZI4J6X5VU1FDQ1CZ9UEK";
     private static String ETHER_TOKEN_WALLET = "0x78B7Aa81C5afd58ef37c02b45DDA9d9Adb58446E";
-    private static String ETHER_TOKEN_ADDRESS = "0x01b180e0D1A3dE482af87917Bc7F60531f3cc469";
+    public static String ETHER_TOKEN_ADDRESS = "0x3cE342395103D540D60121d28CAf27121887862a";
 
     public static String getEtherScanLink(){
         return HTTPS_API_ETHERSCAN_IO_API_MODULE_RINKEBY + ETHER_TOKEN_ADDRESS + ADDRESS + ETHER_TOKEN_WALLET +

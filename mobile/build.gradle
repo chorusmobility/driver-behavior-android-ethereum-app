@@ -12,6 +12,12 @@ android {
         versionName "0.01"
         multiDexEnabled true
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -31,10 +37,19 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'androidx.core:core-ktx:0.3'
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.tc.seekbar:library:0.2.+'
+
+    //Event subscription
     implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation "io.reactivex.rxjava2:rxjava:2.1.13"
+
+    //Custom UI
+    implementation 'com.tc.seekbar:library:0.2.+'
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
     implementation 'com.ncorti:slidetoact:0.3.0'
+
+    //Blockchain access and wrappers
+    implementation ('org.web3j:core:3.3.1-android')
+    implementation 'com.squareup:javapoet:1.11.0'
 
     //Support
     implementation "com.android.support:appcompat-v7:$support"

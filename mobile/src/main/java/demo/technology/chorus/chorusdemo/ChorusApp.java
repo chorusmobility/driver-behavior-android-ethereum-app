@@ -1,28 +1,21 @@
 package demo.technology.chorus.chorusdemo;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 import demo.technology.chorus.chorusdemo.integration.etherscan.EtherScanConstants;
 import demo.technology.chorus.chorusdemo.integration.infura.InfuraConstants;
 import demo.technology.chorus.chorusdemo.model.EtherScanResponse;
 import demo.technology.chorus.chorusdemo.processing.OkHttpRequestProcessing;
 import demo.technology.chorus.chorusdemo.service.events.BalanceUpdateEvent;
-import demo.technology.chorus.chorusdemo.service.events.ShowMessageEvent;
-import demo.technology.chorus.chorusdemo.utils.ChorusTextUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -37,7 +30,7 @@ public class ChorusApp extends MultiDexApplication {
         instance = this;
         dataManager = DataManager.getInstance();
 
-        testInfuraRequest();
+        //testInfuraRequest();
         //testTokenBalanceEtherScan();
     }
 
@@ -50,7 +43,7 @@ public class ChorusApp extends MultiDexApplication {
         float density = getResources().getDisplayMetrics().density;
         if (density == 1.0f) {
             return "mdpi";
-        } else if (density == 1.5f){
+        } else if (density == 1.5f) {
             return "hdpi";
         } else if (density == 2.0f) {
             return "xhdpi";
@@ -72,6 +65,8 @@ public class ChorusApp extends MultiDexApplication {
     }
 
     private void testInfuraRequest() {
+        //GET AVAILABLE METHODS
+
         OkHttpRequestProcessing.runGet("https://api.infura.io/v1/jsonrpc/rinkeby/methods", new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -112,7 +107,7 @@ public class ChorusApp extends MultiDexApplication {
                 if (etherScanResponse != null) {
                     EventBus.getDefault().post(new BalanceUpdateEvent(etherScanResponse.getResult()));
                     //EventBus.getDefault().post(new ShowMessageEvent("Screen is " + nameOfScreen()));
-                   // EventBus.getDefault().post(new ShowMessageEvent("Balance of 0x0 Ether Wallet with OmiseGo Token is " +
+                    // EventBus.getDefault().post(new ShowMessageEvent("Balance of 0x0 Ether Wallet with OmiseGo Token is " +
                     //                ChorusTextUtils.formatDouble4(etherScanResponse.getResult()) + " OMG"));
                 }
             }

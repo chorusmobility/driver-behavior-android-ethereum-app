@@ -8,12 +8,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigInteger;
+
 import demo.technology.chorus.chorusdemo.DataManager;
 import demo.technology.chorus.chorusdemo.R;
+import demo.technology.chorus.chorusdemo.integration.infura.IInfuraResponseListener;
+import demo.technology.chorus.chorusdemo.integration.infura.InfuraSession;
 import demo.technology.chorus.chorusdemo.service.events.BalanceUpdateEvent;
+import demo.technology.chorus.chorusdemo.service.events.ShowMessageEvent;
 import demo.technology.chorus.chorusdemo.utils.ChorusTextUtils;
 import demo.technology.chorus.chorusdemo.view.base.BaseAddressActivity;
 import demo.technology.chorus.chorusdemo.view.main.MapsActivity;
@@ -77,12 +83,12 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
     }
 
     public void onBlockchainShowSelected(View view) {
-        openWalletData();
+        openWalletRinkebyData();
     }
 
     private void updateBalanceText() {
         Double amount = DataManager.getInstance().getUserModel().getWallet().getAmount();
-        ((TextView) findViewById(R.id.balanceText)).setText("or " + (amount == null ? 0 : ChorusTextUtils.formatDouble2(amount)) + " Tokens");
+        ((TextView) findViewById(R.id.balanceText)).setText("or " + (amount == null ? 0 : ChorusTextUtils.formatDouble1(amount)) + " Tokens");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -90,4 +96,22 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
         updateBalanceText();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //INFURA INTEGRATION TEST REQUEST WITH ASKING FOR THE BALANCE
+        InfuraSession.createSession(DataManager.getInstance().getUserModel());
+        InfuraSession.getBalance(new IInfuraResponseListener() {
+            @Override
+            public void waitForStringResponse(String response) {
+                //EventBus.getDefault().post(new ShowMessageEvent("Balance: " + response));
+            }
+
+            @Override
+            public void waitForBigIntResponse(BigInteger response) {
+
+            }
+        });
+        InfuraSession.killSession();
+    }
 }
