@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -19,7 +18,6 @@ import demo.technology.chorus.chorusdemo.R;
 import demo.technology.chorus.chorusdemo.integration.infura.IInfuraResponseListener;
 import demo.technology.chorus.chorusdemo.integration.infura.InfuraSession;
 import demo.technology.chorus.chorusdemo.service.events.BalanceUpdateEvent;
-import demo.technology.chorus.chorusdemo.service.events.ShowMessageEvent;
 import demo.technology.chorus.chorusdemo.utils.ChorusTextUtils;
 import demo.technology.chorus.chorusdemo.view.base.BaseAddressActivity;
 import demo.technology.chorus.chorusdemo.view.main.MapsActivity;

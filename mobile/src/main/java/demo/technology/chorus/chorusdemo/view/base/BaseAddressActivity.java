@@ -22,6 +22,8 @@ import demo.technology.chorus.chorusdemo.service.events.ShowMessageEvent;
 import demo.technology.chorus.chorusdemo.utils.SnackBarUtil;
 import demo.technology.chorus.chorusdemo.utils.vibrator.Vibration;
 
+import static demo.technology.chorus.chorusdemo.integration.etherscan.EtherScanConstants.ETHER_TOKEN_ADDRESS;
+
 public abstract class BaseAddressActivity extends FragmentActivity {
 
     protected SeekBar seekBar;
@@ -50,7 +52,8 @@ public abstract class BaseAddressActivity extends FragmentActivity {
     public void openWalletRinkebyData() {
         try {
             startActivity(new Intent(Intent.ACTION_VIEW).setData(
-                    Uri.parse("https://rinkeby.etherscan.io/address/" + DataManager.getInstance().getUserModel().getWallet().getAddress() + "#tokentxns")));
+                    Uri.parse("https://rinkeby.etherscan.io/token/" + ETHER_TOKEN_ADDRESS +
+                            "?a=" + DataManager.getInstance().getUserModel().getWallet().getAddress())));
         } catch (Exception e) {
             e.printStackTrace();
         }

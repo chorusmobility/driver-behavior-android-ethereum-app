@@ -23,6 +23,7 @@ import okhttp3.Response;
 public class ChorusApp extends MultiDexApplication {
     private static ChorusApp instance;
     private static DataManager dataManager;
+    private static final boolean USE_INTEGRATION_TEST = false;
 
     @Override
     public void onCreate() {
@@ -30,28 +31,10 @@ public class ChorusApp extends MultiDexApplication {
         instance = this;
         dataManager = DataManager.getInstance();
 
-        //testInfuraRequest();
-        //testTokenBalanceEtherScan();
-    }
-
-    public String nameOfScreen() {
-        // return 1.0 if it's MDPI
-        // return 1.5 if it's HDPI
-        // return 2.0 if it's XHDPI
-        // return 3.0 if it's XXHDPI
-        // return 4.0 if it's XXXHDPI
-        float density = getResources().getDisplayMetrics().density;
-        if (density == 1.0f) {
-            return "mdpi";
-        } else if (density == 1.5f) {
-            return "hdpi";
-        } else if (density == 2.0f) {
-            return "xhdpi";
-        } else if (density == 3.0f) {
-            return "xxhdpi";
-        } else if (density == 4.0f) {
-            return "xxxhdpi";
-        } else return density + "";
+        if (USE_INTEGRATION_TEST) {
+            testInfuraRequest();
+            testTokenBalanceEtherScan();
+        }
     }
 
     public static ChorusApp getInstance() {
@@ -107,10 +90,28 @@ public class ChorusApp extends MultiDexApplication {
                 if (etherScanResponse != null) {
                     EventBus.getDefault().post(new BalanceUpdateEvent(etherScanResponse.getResult()));
                     //EventBus.getDefault().post(new ShowMessageEvent("Screen is " + nameOfScreen()));
-                    // EventBus.getDefault().post(new ShowMessageEvent("Balance of 0x0 Ether Wallet with OmiseGo Token is " +
-                    //                ChorusTextUtils.formatDouble4(etherScanResponse.getResult()) + " OMG"));
                 }
             }
         });
+    }
+
+    public String nameOfScreen() {
+        // return 1.0 if it's MDPI
+        // return 1.5 if it's HDPI
+        // return 2.0 if it's XHDPI
+        // return 3.0 if it's XXHDPI
+        // return 4.0 if it's XXXHDPI
+        float density = getResources().getDisplayMetrics().density;
+        if (density == 1.0f) {
+            return "mdpi";
+        } else if (density == 1.5f) {
+            return "hdpi";
+        } else if (density == 2.0f) {
+            return "xhdpi";
+        } else if (density == 3.0f) {
+            return "xxhdpi";
+        } else if (density == 4.0f) {
+            return "xxxhdpi";
+        } else return density + "";
     }
 }
