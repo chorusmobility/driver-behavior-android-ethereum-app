@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.location.LocationServices;
@@ -14,22 +13,60 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigInteger;
+
 import demo.technology.chorus.chorusdemo.DataManager;
 import demo.technology.chorus.chorusdemo.R;
-import demo.technology.chorus.chorusdemo.service.events.BalanceUpdateEvent;
+import demo.technology.chorus.chorusdemo.integration.infura.IInfuraResponseListener;
+import demo.technology.chorus.chorusdemo.integration.infura.InfuraSession;
+import demo.technology.chorus.chorusdemo.service.events.RatingReadingStopEvent;
+import demo.technology.chorus.chorusdemo.service.events.RatingUpdateEvent;
 import demo.technology.chorus.chorusdemo.utils.ChorusTextUtils;
 import demo.technology.chorus.chorusdemo.view.base.BaseLocationActivity;
 
 public class MapsActivity extends BaseLocationActivity {
+    private static final String MAP = "Map";
+    private static final String STAT = "Stat";
+    private static final int TILT = 69;
+    private static final int ZOOM = 17;
+    private static final int BEARING = 0;
+    private TextView ratingTextView;
 
     @Override
     public void openOnSwipeAction() {
+
+        EventBus.getDefault().post(new RatingReadingStopEvent());
+
         //STOP TRIP
         //OPEN START SCREEN WITH DIALOG
-        closeActivity();
+        InfuraSession.createSession(DataManager.getInstance().getUserModel());
+        InfuraSession.finishRideSession(DataManager.getInstance().getRatingModel(), new IInfuraResponseListener() {
+            @Override
+            public void waitForStringResponse(String response) {
+
+            }
+
+            @Override
+            public void waitForBooleanResponse(Boolean response) {
+                InfuraSession.killSession();
+                closeActivity();
+            }
+
+            @Override
+            public void waitForBigIntResponse(BigInteger response) {
+
+            }
+        });
+
+        showWaitingDialog();
+    }
+
+    private void showWaitingDialog() {
+        //TURN TIMEOUT
     }
 
     @Override
@@ -45,9 +82,9 @@ public class MapsActivity extends BaseLocationActivity {
 
         CameraPosition cameraPosition = new CameraPosition.Builder().
                 target(mMap.getCameraPosition().target).
-                tilt(69).
-                zoom(17).
-                bearing(0).
+                tilt(TILT).
+                zoom(ZOOM).
+                bearing(BEARING).
                 build();
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -61,32 +98,36 @@ public class MapsActivity extends BaseLocationActivity {
         initSeekBar();
         initMap(initFragments(savedInstanceState));
         initWalletView();
-        ((TextView)findViewById(R.id.ratingTextView)).setText(ChorusTextUtils.formatDouble1(DataManager.getInstance().getRatingModel().getMainDriverRating()));
+        ratingTextView = findViewById(R.id.ratingTextView);
+        updateRatingUI();
+    }
 
+    private void updateRatingUI() {
+        ratingTextView.setText(ChorusTextUtils.formatDouble1(DataManager.getInstance().getRatingModel().getMainDriverRating()));
     }
 
     private SupportMapFragment initFragments(Bundle savedInstanceState) {
-        SupportMapFragment supportMapFragment = null;
+        SupportMapFragment supportMapFragment;
 
         if (savedInstanceState == null) {
             FragmentManager fm = getSupportFragmentManager();
             supportMapFragment =  SupportMapFragment.newInstance();
-            fm.beginTransaction().replace(R.id.mapContainer, supportMapFragment, "Map").commitAllowingStateLoss();
-            fm.beginTransaction().replace(R.id.statContainer, new MainStatFragment(), "Stat").commitAllowingStateLoss();
+            fm.beginTransaction().replace(R.id.mapContainer, supportMapFragment, MAP).commitAllowingStateLoss();
+            fm.beginTransaction().replace(R.id.statContainer, new MainStatFragment(), STAT).commitAllowingStateLoss();
         } else {
             supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentByTag("Map");
+                    .findFragmentByTag(MAP);
         }
         return supportMapFragment;
     }
 
     private void initMap(SupportMapFragment supportMapFragment) {
-        mLocationPermissionGranted = ContextCompat.checkSelfPermission(this,
+        locationPermissionGranted = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         mFusedLocationProviderClient = LocationServices
                 .getFusedLocationProviderClient(this);
 
-        if (!mLocationPermissionGranted) {
+        if (!locationPermissionGranted) {
             // Permission is not granted. need to show permission ask dialog
             requestFineLocationPermission();
         }
@@ -100,7 +141,14 @@ public class MapsActivity extends BaseLocationActivity {
     }
 
     public void closeActivity() {
+        DataManager.saveData();
         super.onBackPressed();
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(RatingUpdateEvent event) {
+        updateRatingUI();
     }
 
 }

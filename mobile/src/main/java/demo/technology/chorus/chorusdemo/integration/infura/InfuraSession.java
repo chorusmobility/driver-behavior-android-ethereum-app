@@ -13,6 +13,7 @@ import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
@@ -115,6 +116,7 @@ public class InfuraSession {
     }
 
     public static void getBalance(IInfuraResponseListener responseListener) {
+
         try {
             Function function = new Function("balanceOf",
                     Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(DataManager.getInstance().getUserModel().getWallet().getAddress())),
@@ -135,6 +137,7 @@ public class InfuraSession {
     }
 
     public static void initRideSession() {
+
         try {
             Function function = new Function("initDriverTrip",
                     Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(DataManager.getInstance().getUserModel().getWallet().getAddress())),
@@ -172,29 +175,38 @@ public class InfuraSession {
 
     public static void finishRideSession(RatingModel result, IInfuraResponseListener responseListener) {
         //updateDriverStat
-//        try {
-//            Function function = new Function("updateDriverStat", Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(""),
-//                    Arrays.<TypeReference<?>>asList(new TypeReference<org.web3j.abi.datatypes.Bool>() {
-//                    }));
-//
-//            String data = FunctionEncoder.encode(function);
-//            Transaction transaction = Transaction.createEthCallTransaction(
-//                    DataManager.getInstance().getUserModel().getWallet().getAddress(), CONTRACT_ADDRESS_RINKEBY, data);
-//            EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
-//            //Consult return data processing with https://github.com/ethjava/web3j-sample/blob/bd04ba59ac77f3334eeef55eac7b76311e23e169/src/main/java/com/ethjava/TokenClient.java
-//            String value = ethCall.getValue().toString();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
-        postRatingResultIPFS(result, responseListener);
+        String divider = "+";
+        String resultString = (result.getMainDriverRating() * 10) + divider + (result.getAccelerationRating() * 10) + divider +
+                (result.getSpeedingRating() * 10) + divider + (result.getBreakingRating() * 10) + divider + (result.getPhoningRating() * 10);
+        try {
+            Function function = new Function("updateDriverStat",
+                    Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(resultString)),
+                    Arrays.<TypeReference<?>>asList(new TypeReference<org.web3j.abi.datatypes.Bool>() {}));
+
+            String data = FunctionEncoder.encode(function);
+            Transaction transaction = Transaction.createEthCallTransaction(
+                    DataManager.getInstance().getUserModel().getWallet().getAddress(), CONTRACT_ADDRESS_RINKEBY, data);
+            EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
+            //Consult return data processing with https://github.com/ethjava/web3j-sample/blob/bd04ba59ac77f3334eeef55eac7b76311e23e169/src/main/java/com/ethjava/TokenClient.java
+            Boolean value = Boolean.parseBoolean(ethCall.getValue().toString());
+//            if (value) {
+//                postRatingResultIPFS(result, responseListener);
+//            }
+            responseListener.waitForBooleanResponse(value);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void postRatingResultIPFS(RatingModel result, IInfuraResponseListener responseListener) {
         String divider = "+";
         String resultString = result.getMainDriverRating() + divider + result.getAccelerationRating() + divider +
                 result.getSpeedingRating() + divider + result.getBreakingRating() + divider + result.getPhoningRating();
+
+        String startTripCoordinate = null;
+        String endTripCoordinate = null;
 
         if (isIpfsRuning()) {
             responseListener.waitForStringResponse(uploadToIpfs(resultString));
@@ -281,7 +293,8 @@ public class InfuraSession {
             String line;
 
             while ((line = rd.readLine()) != null) {
-                sb.append(line + '\n');
+                sb.append(line);
+                sb.append('\n');
             }
             //System.out.println (sb.toString());
 

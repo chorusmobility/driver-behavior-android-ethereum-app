@@ -1,9 +1,13 @@
 package demo.technology.chorus.chorusdemo.view.start;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +27,8 @@ import demo.technology.chorus.chorusdemo.view.base.BaseAddressActivity;
 import demo.technology.chorus.chorusdemo.view.main.MapsActivity;
 import demo.technology.chorus.chorusdemo.view.settings.SettingsActivity;
 
+import static demo.technology.chorus.chorusdemo.view.base.BaseLocationFragment.PERMISSIONS_REQUEST_LOCATION;
+
 public class ChorusBalanceActivity extends BaseAddressActivity {
 
     private ImageView rainBowImageView;
@@ -36,7 +42,14 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
         initView();
         initSeekBar();
         initFragments(savedInstanceState);
+        initPermissions();
+    }
 
+    private void initPermissions() {
+        if (!(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+            requestFineLocationPermission();
+        }
     }
 
     private void initView() {
@@ -50,11 +63,15 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
         addressTextView.setText(DataManager.getInstance().getUserModel().getWallet().getAddress());
         welcomeTextView.setText(ChorusTextUtils.getWelcomeText() + ", " +
                 DataManager.getInstance().getUserModel().getPrivateInfo().getName() + "!\nYour score is:");
-        rainBowTextView.setText(ChorusTextUtils.formatDouble1(DataManager.getInstance().getRatingModel().getMainDriverRating()));
+        updateRatingUI();
     }
 
     @Override
     public void openOnSwipeAction() {
+        InfuraSession.createSession(DataManager.getInstance().getUserModel());
+        InfuraSession.initRideSession();
+        InfuraSession.killSession();
+
         startActivity(new Intent(ChorusBalanceActivity.this, MapsActivity.class),
                 ActivityOptionsCompat.makeSceneTransitionAnimation(ChorusBalanceActivity.this,
                         generatePairFromView(rainBowImageView),
@@ -97,6 +114,7 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        updateRatingUI();
         //INFURA INTEGRATION TEST REQUEST WITH ASKING FOR THE BALANCE
         InfuraSession.createSession(DataManager.getInstance().getUserModel());
         InfuraSession.getBalance(new IInfuraResponseListener() {
@@ -106,10 +124,41 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
             }
 
             @Override
+            public void waitForBooleanResponse(Boolean response) {
+
+            }
+
+            @Override
             public void waitForBigIntResponse(BigInteger response) {
 
             }
         });
         InfuraSession.killSession();
+    }
+
+    private void updateRatingUI() {
+        if (rainBowTextView != null) {
+            rainBowTextView.setText(ChorusTextUtils.formatDouble1(DataManager.getInstance().getRatingModel().getMainDriverRating()));
+        }
+    }
+
+    public void requestFineLocationPermission() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                PERMISSIONS_REQUEST_LOCATION);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted
+                }
+            }
+        }
     }
 }

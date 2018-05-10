@@ -121,6 +121,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:gravity="center"
+            android:visibility="gone"
             android:lineSpacingExtra="1.3sp"
             android:longClickable="false"
             android:onClick="onAddressClick"

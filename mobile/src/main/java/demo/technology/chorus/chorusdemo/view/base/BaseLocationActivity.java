@@ -6,7 +6,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdate;
@@ -29,7 +28,7 @@ public abstract class BaseLocationActivity extends BaseAddressActivity implement
     protected float zoom;
     protected GoogleMap mMap;
     protected FusedLocationProviderClient mFusedLocationProviderClient;
-    protected boolean mLocationPermissionGranted;
+    protected boolean locationPermissionGranted;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -45,7 +44,7 @@ public abstract class BaseLocationActivity extends BaseAddressActivity implement
 
     private void getDeviceLocation() {
         try {
-            if (mLocationPermissionGranted) {
+            if (locationPermissionGranted) {
                 Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
                 locationResult.addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
@@ -77,7 +76,7 @@ public abstract class BaseLocationActivity extends BaseAddressActivity implement
             return;
         }
         try {
-            if (mLocationPermissionGranted) {
+            if (locationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setMyLocationButtonEnabled(true);
                 getDeviceLocation();
