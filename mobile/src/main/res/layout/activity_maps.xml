@@ -8,14 +8,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/map_background"
+        android:background="#000"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
         <FrameLayout
             android:id="@+id/mapContainer"
             android:layout_width="match_parent"
-            android:layout_height="188.3dp"
+            android:layout_height="205dp"
             tools:context="demo.technology.chorus.chorusdemo.view.main.MapsActivity" />
 
         <FrameLayout
@@ -23,14 +23,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:paddingTop="42dp">
+            android:paddingTop="22.7dp">
 
             <ImageView
                 android:id="@+id/rainbow_view"
                 android:layout_width="@dimen/rainbow_width"
                 android:layout_height="@dimen/rainbow_height"
+                android:visibility="invisible"
                 android:layout_gravity="center_horizontal"
-                android:src="@mipmap/rainbow_grey"
+                android:src="@mipmap/invalid_name"
                 android:transitionName="rainbow" />
 
             <TextView
@@ -69,10 +70,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="120dp"
-            android:paddingBottom="24dp"
+            android:paddingBottom="53dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingTop="32dp"
+            android:paddingTop="53dp"
             tools:context="demo.technology.chorus.chorusdemo.view.main.MapsActivity" />
 
         <FrameLayout
@@ -107,6 +108,10 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:gravity="center"
+
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="normal"
                 android:lineSpacingExtra="24sp"
                 android:text="SLIDE TO END RIDE"
                 android:textColor="#ffffff"

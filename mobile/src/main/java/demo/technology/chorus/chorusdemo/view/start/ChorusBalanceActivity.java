@@ -103,7 +103,7 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
 
     private void updateBalanceText() {
         Double amount = DataManager.getInstance().getUserModel().getWallet().getAmount();
-        ((TextView) findViewById(R.id.balanceText)).setText("or " + (amount == null ? 0 : ChorusTextUtils.formatDouble1(amount)) + " Tokens");
+        ((TextView) findViewById(R.id.balanceText)).setText((amount == null ? 0 : ChorusTextUtils.formatDouble1(amount)) + " Tokens");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

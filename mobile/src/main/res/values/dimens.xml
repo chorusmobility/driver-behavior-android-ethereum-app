@@ -9,6 +9,7 @@
     <!-- TRIP -->
     <dimen name="stat_horizontal_margin">32dp</dimen>
     <dimen name="text_address">12sp</dimen>
+    <dimen name="text_address_24">24sp</dimen>
     <dimen name="text_score">41.7sp</dimen>
     <dimen name="text_outof">11sp</dimen>
     <dimen name="text_slider">14sp</dimen>
