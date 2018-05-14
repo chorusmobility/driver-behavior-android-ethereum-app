@@ -47,7 +47,8 @@ public class MapsActivity extends BaseLocationActivity {
         InfuraSession.finishRideSession(DataManager.getInstance().getRatingModel(), new IInfuraResponseListener() {
             @Override
             public void waitForStringResponse(String response) {
-
+                InfuraSession.killSession();
+                closeActivity();
             }
 
             @Override

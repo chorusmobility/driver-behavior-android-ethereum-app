@@ -3,29 +3,35 @@ package demo.technology.chorus.chorusdemo.integration.infura;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONObject;
+import org.joor.Reflect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.generated.AbiTypes;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.RawTransactionManager;
+import org.web3j.tx.TransactionManager;
+import org.web3j.tx.Transfer;
+import org.web3j.utils.Convert;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -71,7 +77,6 @@ public class InfuraSession {
     static void createSession() {//For testing
         executorService = Executors.newCachedThreadPool();
         web3j = buildWeb3j();
-
     }
 
     public static void createSession(UserModel account) {
@@ -128,14 +133,59 @@ public class InfuraSession {
             String value = ethCall.getValue().substring(2);
             BigInteger bigInteger = new BigInteger(value, 16);
             Log.d("get balance result:", "AMOUNT " + bigInteger);
-            responseListener.waitForStringResponse(bigInteger.toString());
+            if (responseListener != null) {
+                responseListener.waitForStringResponse(bigInteger.toString());
+            }
             EventBus.getDefault().post(new BalanceUpdateEvent(bigInteger.doubleValue() / GWEI));
+            InfuraSession.killSession();
         } catch (Exception e) {
             Log.d("get balance failed:", e.getMessage(), e);
-            responseListener.waitForStringResponse(null);
+            if (responseListener != null) {
+                responseListener.waitForStringResponse(null);
+            }
+            InfuraSession.killSession();
         }
     }
 
+    public static void deposit(final IInfuraResponseListener responseListener) {
+        executorService.execute(() -> {
+            InfuraSession.createSession(DataManager.getInstance().getUserModel());
+            try {
+                final TransactionManager transactionManager = new RawTransactionManager(web3j, DataManager.getInstance().getCredentials());
+                TransactionReceipt transferReceipt = new RemoteCall<>(() -> {
+                    Transfer transfer = new Transfer(web3j, transactionManager);
+                    Field field = transfer.getClass().getDeclaredField("GAS_LIMIT");
+                    field.setAccessible(true);
+                    field.set(transfer, BigInteger.valueOf(60000));
+                    return (TransactionReceipt) Reflect.on(transfer)
+                            .call("send", CONTRACT_ADDRESS_RINKEBY, BigDecimal.valueOf(1 * GWEI), Convert.Unit.WEI).get();
+                }).send();
+
+                String hash = transferReceipt.getTransactionHash();
+                Log.i("Wallet Deposit", "Transaction complete, view it at https://rinkeby.etherscan.io/tx/"
+                        + hash);
+
+                responseListener.waitForStringResponse(hash);
+                getBalance(null);
+            } catch (Exception e) {
+                Log.d("get balance failed:", e.getMessage(), e);
+                responseListener.waitForStringResponse(null);
+                InfuraSession.killSession();
+            }
+        });
+    }
+
+    private static void setFinalStatic(Field field, Object newValue) throws Exception {
+        field.setAccessible(true);
+
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+
+        field.set(null, newValue);
+    }
+
+    @Deprecated
     public static void initRideSession() {
 
         try {
@@ -155,6 +205,7 @@ public class InfuraSession {
         }
     }
 
+    @Deprecated
     public static void setBenefeciary() {
         try {
             Function function = new Function("setbeneficiary",
@@ -173,26 +224,47 @@ public class InfuraSession {
         }
     }
 
-    public static void finishRideSession(RatingModel result, IInfuraResponseListener responseListener) {
-        //updateDriverStat
-        String divider = "+";
-        String resultString = (result.getMainDriverRating() * 10) + divider + (result.getAccelerationRating() * 10) + divider +
-                (result.getSpeedingRating() * 10) + divider + (result.getBreakingRating() * 10) + divider + (result.getPhoningRating() * 10);
+    public static void finishRideSession(final RatingModel result, IInfuraResponseListener responseListener) {
+        //CALCULATE AMOUNT HERE
+        long _amount;
+
+        //FUZZY LOGIC for Rewarding DB
+        if (result.getMainDriverRating() > 75 && result.getMainDriverRating() <= 100) {
+            //SEND Reward
+            //beneficiary.transfer();
+            _amount = 1 + Double.valueOf(result.getMainDriverRating() / 10).longValue();
+
+        } else if (result.getMainDriverRating() > 60 && result.getMainDriverRating() <= 75) {
+            //nothing changed
+            //Send refund bid_limit
+            _amount = 1;
+
+        } else {
+            //PANISHMENT
+            _amount = 1 - (Double.valueOf(1 - (result.getMainDriverRating() / 10.0)).longValue());
+        }
         try {
-            Function function = new Function("updateDriverStat",
-                    Arrays.<Type>asList(new org.web3j.abi.datatypes.Utf8String(resultString)),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<org.web3j.abi.datatypes.Bool>() {}));
+
+            Function function = new Function("withdraw",
+                    Arrays.<Type>asList(new Uint256(BigInteger.valueOf(_amount))),// * 1000000000 * 1000000000))),
+                    Arrays.<TypeReference<?>>asList(new TypeReference<org.web3j.abi.datatypes.Bool>() {
+                    }));
 
             String data = FunctionEncoder.encode(function);
-            Transaction transaction = Transaction.createEthCallTransaction(
-                    DataManager.getInstance().getUserModel().getWallet().getAddress(), CONTRACT_ADDRESS_RINKEBY, data);
+            Transaction transaction = Transaction.createFunctionCallTransaction(CONTRACT_ADDRESS_RINKEBY, BigInteger.ZERO,
+                    BigInteger.valueOf(22000000000L), BigInteger.valueOf(80000L),
+                    DataManager.getInstance().getUserModel().getWallet().getAddress(), data);
+
             EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
+
+            String response = ethCall.getValue().toString();
+            Log.i("Withdraw to wallet", "Response " + response);
+
             //Consult return data processing with https://github.com/ethjava/web3j-sample/blob/bd04ba59ac77f3334eeef55eac7b76311e23e169/src/main/java/com/ethjava/TokenClient.java
-            Boolean value = Boolean.parseBoolean(ethCall.getValue().toString());
 //            if (value) {
 //                postRatingResultIPFS(result, responseListener);
 //            }
-            responseListener.waitForBooleanResponse(value);
+            responseListener.waitForStringResponse(response);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -231,7 +303,8 @@ public class InfuraSession {
 
         return IpfsRunning;
     }
-//
+
+    //
     //Upload data to IPFS and return the HASH uri
     public static String uploadToIpfs(String data) {
         try {
@@ -239,14 +312,14 @@ public class InfuraSession {
             //ipfs.refs.local();
             NamedStreamable.ByteArrayWrapper file = new NamedStreamable.ByteArrayWrapper("ppkpub-odin.data", data.getBytes());
             List<MerkleNode> merkleNodeList = ipfs.add(file);
-            Log.e("Util.uploadToIpfs()",  "addResult: " + merkleNodeList.toString());
+            Log.e("Util.uploadToIpfs()", "addResult: " + merkleNodeList.toString());
             //JSONObject tmp_obj = new JSONObject(addResult);
             //String hash = tmp_obj.optString("Hash");
             //if (hash == null)
             //    return null;
 
             //return "ipfs:" + hash;
-            return  "ipfs:";
+            return "ipfs:";
         } catch (Exception e) {
             Log.e("Util.uploadToIpfs() err", e.toString());
             return null;

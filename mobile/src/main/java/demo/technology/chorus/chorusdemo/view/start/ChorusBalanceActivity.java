@@ -4,24 +4,33 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
+
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.math.BigInteger;
 
+import demo.technology.chorus.chorusdemo.ChorusApp;
 import demo.technology.chorus.chorusdemo.DataManager;
 import demo.technology.chorus.chorusdemo.R;
 import demo.technology.chorus.chorusdemo.integration.infura.IInfuraResponseListener;
 import demo.technology.chorus.chorusdemo.integration.infura.InfuraSession;
 import demo.technology.chorus.chorusdemo.service.events.BalanceUpdateEvent;
+import demo.technology.chorus.chorusdemo.service.events.ShowMessageEvent;
 import demo.technology.chorus.chorusdemo.utils.ChorusTextUtils;
 import demo.technology.chorus.chorusdemo.view.base.BaseAddressActivity;
 import demo.technology.chorus.chorusdemo.view.main.MapsActivity;
@@ -34,6 +43,7 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
     private ImageView rainBowImageView;
     private TextView rainBowTextView;
     private TextView addressTextView;
+    private MaterialDialog materialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +78,50 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
 
     @Override
     public void openOnSwipeAction() {
-        InfuraSession.createSession(DataManager.getInstance().getUserModel());
-        InfuraSession.initRideSession();
-        InfuraSession.killSession();
 
-        startActivity(new Intent(ChorusBalanceActivity.this, MapsActivity.class),
-                ActivityOptionsCompat.makeSceneTransitionAnimation(ChorusBalanceActivity.this,
-                        generatePairFromView(rainBowImageView),
-                        generatePairFromView(rainBowTextView),
-                        generatePairFromView(addressTextView)).toBundle());
+        boolean wrapInScrollView = true;
+        materialDialog = new MaterialDialog.Builder(this)
+                .title("Ethereum blockchain is processing transaction")
+                .titleGravity(GravityEnum.CENTER)
+                .positiveText("Ok")
+                .progress(true, 0)
+                .onPositive((dialog, which) -> dismissDialog())
+                .show();
+
+        InfuraSession.deposit(new IInfuraResponseListener() {
+            @Override
+            public void waitForStringResponse(String response) {
+                dismissDialog();
+
+                if (!TextUtils.isEmpty(response) && response.length() > 2) {
+                    ChorusBalanceActivity.this.runOnUiThread(() -> startActivity(new Intent(ChorusBalanceActivity.this, MapsActivity.class),
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(ChorusBalanceActivity.this,
+                                    generatePairFromView(rainBowImageView),
+                                    generatePairFromView(rainBowTextView),
+                                    generatePairFromView(addressTextView)).toBundle()));
+                } else {
+                    EventBus.getDefault().post(new ShowMessageEvent("Deposit had not processed. Please check balance."));
+                }
+            }
+
+            @Override
+            public void waitForBooleanResponse(Boolean response) {
+                dismissDialog();
+            }
+
+            @Override
+            public void waitForBigIntResponse(BigInteger response) {
+                dismissDialog();
+            }
+        });
+
+    }
+
+    private void dismissDialog() {
+        if (materialDialog != null) {
+            materialDialog.dismiss();
+            materialDialog = null;
+        }
     }
 
     @Override

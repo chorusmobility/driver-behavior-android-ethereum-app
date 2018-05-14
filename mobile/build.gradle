@@ -37,6 +37,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'androidx.core:core-ktx:0.3'
     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'org.jooq:joor-java-8:0.9.7'
 
     //Event subscription
     implementation 'org.greenrobot:eventbus:3.1.1'
@@ -50,6 +51,12 @@ dependencies {
     //Blockchain access and wrappers
     implementation ('org.web3j:core:3.3.1-android')
     implementation 'com.squareup:javapoet:1.11.0'
+    //implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+    //implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+    //implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.5'
+    //implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.59'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+
 
     //Support
     implementation "com.android.support:appcompat-v7:$support"

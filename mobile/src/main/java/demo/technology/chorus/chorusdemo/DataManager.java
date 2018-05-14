@@ -5,10 +5,22 @@ import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+import org.web3j.crypto.CipherException;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import demo.technology.chorus.chorusdemo.model.PrivateInfo;
 import demo.technology.chorus.chorusdemo.model.RatingModel;
 import demo.technology.chorus.chorusdemo.model.UserModel;
 import demo.technology.chorus.chorusdemo.model.WalletModel;
+import demo.technology.chorus.chorusdemo.service.events.ShowMessageEvent;
+import demo.technology.chorus.chorusdemo.utils.ChorusTextUtils;
 
 public class DataManager {
     private static final String UM = "UM";
@@ -17,6 +29,8 @@ public class DataManager {
     private static UserModel userModel;
     private static RatingModel ratingModel;
     private static Gson gson;
+    private static Credentials credentials;
+    public static ExecutorService executorService;
 
     public static DataManager getInstance() {
         if (instance == null) {
@@ -29,8 +43,25 @@ public class DataManager {
                     new RatingModel(10d, 10d, 10d, 10d, 10d) :
                     gson.fromJson(rating, RatingModel.class);
             saveData();
+
+            executorService = Executors.newSingleThreadExecutor();
+            executorService.execute(() -> {
+                File file = ChorusTextUtils.createFileFromInputStream(ChorusApp.getInstance().getResources().openRawResource(R.raw.utc), "utc");
+                try {
+                    credentials = WalletUtils.loadCredentials("1qaz2wsX@", file);
+                    EventBus.getDefault().post(new ShowMessageEvent("Credentials loaded"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (CipherException e) {
+                    e.printStackTrace();
+                }
+            });
         }
         return instance;
+    }
+
+    public Credentials getCredentials() {
+        return credentials;
     }
 
     public UserModel getUserModel() {
