@@ -78,12 +78,13 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
 
     @Override
     public void openOnSwipeAction() {
-
-        boolean wrapInScrollView = true;
         materialDialog = new MaterialDialog.Builder(this)
                 .title("Ethereum blockchain is processing transaction")
-                .titleGravity(GravityEnum.CENTER)
                 .positiveText("Ok")
+                .titleGravity(GravityEnum.START)
+                .contentGravity(GravityEnum.START)
+                .itemsGravity(GravityEnum.START)
+                .buttonsGravity(GravityEnum.START)
                 .progress(true, 0)
                 .onPositive((dialog, which) -> dismissDialog())
                 .show();

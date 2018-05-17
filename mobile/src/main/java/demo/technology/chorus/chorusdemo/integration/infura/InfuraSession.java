@@ -8,16 +8,21 @@ import org.joor.Reflect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
+import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthEstimateGas;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
@@ -35,6 +40,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -64,7 +70,10 @@ public class InfuraSession {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private static String IPFS_PROXY_URL = "https://ipfs.infura.io/ipfs/";
 
-    private static Web3j web3j;
+    private static final BigInteger ACCOUNT_UNLOCK_DURATION = BigInteger.valueOf(30);
+    private static final String WALLET_PASSWORD = "1qaz2wsX@";
+
+    private static volatile Web3j web3j;
     private static UserModel account;
     private static boolean isAlive;
     private static ExecutorService executorService;
@@ -94,7 +103,7 @@ public class InfuraSession {
             try {
                 Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().send();
                 Log.d("WEB3ClientVersion", "WEB3ClientVersion: " + web3ClientVersion.getWeb3ClientVersion());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
@@ -124,12 +133,15 @@ public class InfuraSession {
 
         try {
             Function function = new Function("balanceOf",
-                    Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(DataManager.getInstance().getUserModel().getWallet().getAddress())),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
+                    Arrays.asList(new org.web3j.abi.datatypes.Address(DataManager.getInstance().getUserModel().getWallet().getAddress())),
+                    Arrays.asList(new TypeReference<Uint256>() {
                     }));
             String encodedFunction = FunctionEncoder.encode(function);
             EthCall ethCall = web3j.ethCall(Transaction.createEthCallTransaction(CONTRACT_ADDRESS_RINKEBY,
-                    ETHER_TOKEN_ADDRESS, encodedFunction), DefaultBlockParameterName.LATEST).sendAsync().get();
+                    //DataManager.getInstance().getUserModel().getWallet().getAddress(),
+                    ETHER_TOKEN_ADDRESS,
+                    encodedFunction), DefaultBlockParameterName.LATEST).sendAsync().get();
+            Log.d("get balance result:", "AMOUNT " + ethCall.getValue());
             String value = ethCall.getValue().substring(2);
             BigInteger bigInteger = new BigInteger(value, 16);
             Log.d("get balance result:", "AMOUNT " + bigInteger);
@@ -156,7 +168,7 @@ public class InfuraSession {
                     Transfer transfer = new Transfer(web3j, transactionManager);
                     Field field = transfer.getClass().getDeclaredField("GAS_LIMIT");
                     field.setAccessible(true);
-                    field.set(transfer, BigInteger.valueOf(60000));
+                    field.set(transfer, BigInteger.valueOf(600000));
                     return (TransactionReceipt) Reflect.on(transfer)
                             .call("send", CONTRACT_ADDRESS_RINKEBY, BigDecimal.valueOf(1 * GWEI), Convert.Unit.WEI).get();
                 }).send();
@@ -173,55 +185,6 @@ public class InfuraSession {
                 InfuraSession.killSession();
             }
         });
-    }
-
-    private static void setFinalStatic(Field field, Object newValue) throws Exception {
-        field.setAccessible(true);
-
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
-        field.set(null, newValue);
-    }
-
-    @Deprecated
-    public static void initRideSession() {
-
-        try {
-            Function function = new Function("initDriverTrip",
-                    Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(DataManager.getInstance().getUserModel().getWallet().getAddress())),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
-                    }));
-            String data = FunctionEncoder.encode(function);
-            Transaction transaction = Transaction.createEthCallTransaction(
-                    DataManager.getInstance().getUserModel().getWallet().getAddress(), CONTRACT_ADDRESS_RINKEBY, data);
-            EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
-            String value = ethCall.getValue();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Deprecated
-    public static void setBenefeciary() {
-        try {
-            Function function = new Function("setbeneficiary",
-                    Arrays.<Type>asList(new org.web3j.abi.datatypes.Address(DataManager.getInstance().getUserModel().getWallet().getAddress())),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
-                    }));
-            String data = FunctionEncoder.encode(function);
-            Transaction transaction = Transaction.createEthCallTransaction(
-                    DataManager.getInstance().getUserModel().getWallet().getAddress(), CONTRACT_ADDRESS_RINKEBY, data);
-            EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
-            String value = ethCall.getValue();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
     }
 
     public static void finishRideSession(final RatingModel result, IInfuraResponseListener responseListener) {
@@ -245,26 +208,154 @@ public class InfuraSession {
         }
         try {
 
+            BigInteger value = Convert.toWei(String.valueOf(_amount), Convert.Unit.ETHER).toBigInteger();
             Function function = new Function("withdraw",
-                    Arrays.<Type>asList(new Uint256(BigInteger.valueOf(_amount))),// * 1000000000 * 1000000000))),
-                    Arrays.<TypeReference<?>>asList(new TypeReference<org.web3j.abi.datatypes.Bool>() {
+                    Arrays.asList(new Uint256(value)),
+                    Arrays.asList(new TypeReference<Uint256>() {
                     }));
 
             String data = FunctionEncoder.encode(function);
-            Transaction transaction = Transaction.createFunctionCallTransaction(CONTRACT_ADDRESS_RINKEBY, BigInteger.ZERO,
-                    BigInteger.valueOf(22000000000L), BigInteger.valueOf(80000L),
-                    DataManager.getInstance().getUserModel().getWallet().getAddress(), data);
 
-            EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
+//            Log.e("Estimate gas deposit", "Should be " + estimateGas(data, CONTRACT_ADDRESS_RINKEBY, DataManager.getInstance().getUserModel().getWallet().getAddress()).toString() + " Gas");
 
-            String response = ethCall.getValue().toString();
-            Log.i("Withdraw to wallet", "Response " + response);
+
+            executorService.execute(() -> {
+                try {
+                    Transaction transaction = Transaction.createFunctionCallTransaction(CONTRACT_ADDRESS_RINKEBY, getNonce(DataManager.getInstance().getCredentials().getAddress()),
+                            web3j.ethGasPrice().send().getGasPrice(), BigInteger.valueOf(6500000), //web3j.ethGasPrice().send().getGasPrice() or Transaction.DEFAULT_GAS
+                            DataManager.getInstance().getUserModel().getWallet().getAddress(), data);
+
+                    EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
+
+
+                    String response = ethCall.getValue().toString();
+                    Log.i("Withdraw to wallet", "Response " + response);
+                    responseListener.waitForStringResponse(response);
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
 
             //Consult return data processing with https://github.com/ethjava/web3j-sample/blob/bd04ba59ac77f3334eeef55eac7b76311e23e169/src/main/java/com/ethjava/TokenClient.java
 //            if (value) {
 //                postRatingResultIPFS(result, responseListener);
 //            }
-            responseListener.waitForStringResponse(response);
+
+            // INFURA 405 Method not allowed
+//            try {
+//                Transaction transactionNew = Transaction.createFunctionCallTransaction(
+//                        CONTRACT_ADDRESS_RINKEBY, getNonce(CONTRACT_ADDRESS_RINKEBY),  Transaction.DEFAULT_GAS, BigInteger.valueOf(6500000), DataManager.getInstance().getUserModel().getWallet().getAddress(), data);
+//
+//                org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
+//                        web3j.ethSendTransaction(transactionNew).sendAsync().get();
+//
+//                String transactionHash = transactionResponse.getTransactionHash();
+//                Log.i("Wallet Deposit", "Transaction complete, view it at https://rinkeby.etherscan.io/tx/"
+//                        + transactionHash);
+//
+//                responseListener.waitForStringResponse(transactionHash);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+
+
+//            org.web3j.protocol.core.methods.response.EthCall response = web3j.ethCall(
+//                    Transaction.createEthCallTransaction(CONTRACT_ADDRESS_RINKEBY, DataManager.getInstance().getUserModel().getWallet().getAddress(), data),
+//            DefaultBlockParameterName.LATEST).sendAsync().get();
+//
+//            List<Type> someTypes = FunctionReturnDecoder.decode(
+//                    response.getValue(), function.getOutputParameters());
+//
+//            Log.i("Received Data", "" + someTypes);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+//    private static boolean unlockAccount() throws Exception {
+//        List<Object> attributes = new ArrayList<>(3);
+//        attributes.add(CONTRACT_ADDRESS_RINKEBY);
+//        attributes.add(WALLET_PASSWORD);
+//
+//        if (ACCOUNT_UNLOCK_DURATION != null) {
+//            // Parity has a bug where it won't support a duration
+//            // See https://github.com/ethcore/parity/issues/1215
+//            attributes.add(ACCOUNT_UNLOCK_DURATION.longValue());
+//        } else {
+//            // we still need to include the null value, otherwise Parity rejects request
+//            attributes.add(null);
+//        }
+//
+//        return new Request<?, PersonalUnlockAccount>(
+//                "personal_unlockAccount",
+//                attributes,
+//                web3j,
+//                PersonalUnlockAccount.class);
+//
+//    }
+
+    private static BigInteger estimateGas(String encodedFunction, String from, String to) throws Exception {
+        EthEstimateGas ethEstimateGas = web3j.ethEstimateGas(
+                Transaction.createEthCallTransaction(from, to, encodedFunction))
+                .sendAsync().get();
+        return ethEstimateGas.getAmountUsed();
+    }
+
+    private static BigInteger getNonce(String address) throws ExecutionException, InterruptedException {
+        EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
+                address, DefaultBlockParameterName.LATEST).sendAsync().get();
+
+        return ethGetTransactionCount.getTransactionCount();
+    }
+
+    private static void setFinalStatic(Field field, Object newValue) throws Exception {
+        field.setAccessible(true);
+
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+
+        field.set(null, newValue);
+    }
+
+    @Deprecated
+    public static void initRideSession() {
+
+        try {
+            Function function = new Function("initDriverTrip",
+                    Arrays.asList(new org.web3j.abi.datatypes.Address(DataManager.getInstance().getUserModel().getWallet().getAddress())),
+                    Arrays.asList(new TypeReference<Uint256>() {
+                    }));
+            String data = FunctionEncoder.encode(function);
+            Transaction transaction = Transaction.createEthCallTransaction(
+                    DataManager.getInstance().getUserModel().getWallet().getAddress(), CONTRACT_ADDRESS_RINKEBY, data);
+            EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
+            String value = ethCall.getValue();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Deprecated
+    public static void setBenefeciary() {
+        try {
+            Function function = new Function("setbeneficiary",
+                    Arrays.asList(new org.web3j.abi.datatypes.Address(DataManager.getInstance().getUserModel().getWallet().getAddress())),
+                    Arrays.asList(new TypeReference<Uint256>() {
+                    }));
+            String data = FunctionEncoder.encode(function);
+            Transaction transaction = Transaction.createEthCallTransaction(
+                    DataManager.getInstance().getUserModel().getWallet().getAddress(), CONTRACT_ADDRESS_RINKEBY, data);
+            EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
+            String value = ethCall.getValue();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -378,7 +469,7 @@ public class InfuraSession {
         return "";
     }
 
-    public static void doTrustCertificates() throws Exception {
+    public static void doTrustCertificates() {
         TrustManager[] trustAllCerts = new TrustManager[]{
                 new X509TrustManager() {
                     public java.security.cert.X509Certificate[] getAcceptedIssuers() {

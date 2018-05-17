@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -36,25 +38,39 @@ public class MapsActivity extends BaseLocationActivity {
     private static final int BEARING = 0;
     private TextView ratingTextView;
 
+    private MaterialDialog materialDialog;
+
     @Override
     public void openOnSwipeAction() {
-
         EventBus.getDefault().post(new RatingReadingStopEvent());
-
         //STOP TRIP
         //OPEN START SCREEN WITH DIALOG
         InfuraSession.createSession(DataManager.getInstance().getUserModel());
+        materialDialog = new MaterialDialog.Builder(MapsActivity.this)
+                .title("Ethereum blockchain is processing transaction")
+                .positiveText("Ok")
+                .titleGravity(GravityEnum.START)
+                .contentGravity(GravityEnum.START)
+                .itemsGravity(GravityEnum.START)
+                .buttonsGravity(GravityEnum.START)
+                .progress(true, 0)
+                .onPositive((dialog, which) -> dismissDialog())
+                .show();
         InfuraSession.finishRideSession(DataManager.getInstance().getRatingModel(), new IInfuraResponseListener() {
             @Override
             public void waitForStringResponse(String response) {
-                InfuraSession.killSession();
-                closeActivity();
+                MapsActivity.this.runOnUiThread(() -> {
+                    InfuraSession.killSession();
+                    closeActivity();
+                });
             }
 
             @Override
             public void waitForBooleanResponse(Boolean response) {
-                InfuraSession.killSession();
-                closeActivity();
+                MapsActivity.this.runOnUiThread(() -> {
+                    InfuraSession.killSession();
+                    closeActivity();
+                });
             }
 
             @Override
@@ -64,6 +80,13 @@ public class MapsActivity extends BaseLocationActivity {
         });
 
         showWaitingDialog();
+    }
+
+    private void dismissDialog() {
+        if (materialDialog != null) {
+            materialDialog.dismiss();
+            materialDialog = null;
+        }
     }
 
     private void showWaitingDialog() {
@@ -143,6 +166,7 @@ public class MapsActivity extends BaseLocationActivity {
 
     public void closeActivity() {
         DataManager.saveData();
+        dismissDialog();
         super.onBackPressed();
     }
 
