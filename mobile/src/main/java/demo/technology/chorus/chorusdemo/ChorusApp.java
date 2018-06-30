@@ -1,9 +1,12 @@
 package demo.technology.chorus.chorusdemo;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import com.google.gson.Gson;
 
@@ -13,6 +16,8 @@ import java.io.IOException;
 
 import demo.technology.chorus.chorusdemo.integration.etherscan.EtherScanConstants;
 import demo.technology.chorus.chorusdemo.integration.infura.InfuraConstants;
+import demo.technology.chorus.chorusdemo.integration.infura.JavaScriptWrapper;
+import demo.technology.chorus.chorusdemo.interfaces.WebAppInterface;
 import demo.technology.chorus.chorusdemo.model.EtherScanResponse;
 import demo.technology.chorus.chorusdemo.processing.OkHttpRequestProcessing;
 import demo.technology.chorus.chorusdemo.service.events.BalanceUpdateEvent;
@@ -35,6 +40,15 @@ public class ChorusApp extends MultiDexApplication {
             testInfuraRequest();
             testTokenBalanceEtherScan();
         }
+        initWebView();
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private void initWebView() {
+        WebView webView = new WebView(this);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webView.addJavascriptInterface(new WebAppInterface(this), "Android");
     }
 
     public static ChorusApp getInstance() {

@@ -22,6 +22,8 @@ import demo.technology.chorus.chorusdemo.model.WalletModel;
 import demo.technology.chorus.chorusdemo.service.events.ShowMessageEvent;
 import demo.technology.chorus.chorusdemo.utils.ChorusTextUtils;
 
+import static demo.technology.chorus.chorusdemo.integration.infura.InfuraBase.USE_NATIVE_JS;
+
 public class DataManager {
     private static final String UM = "UM";
     private static final String RM = "RM";
@@ -45,17 +47,22 @@ public class DataManager {
             saveData();
 
             executorService = Executors.newSingleThreadExecutor();
-            executorService.execute(() -> {
-                File file = ChorusTextUtils.createFileFromInputStream(ChorusApp.getInstance().getResources().openRawResource(R.raw.utc), "utc");
-                try {
-                    credentials = WalletUtils.loadCredentials("1qaz2wsX@", file);
-                    EventBus.getDefault().post(new ShowMessageEvent("Credentials loaded"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (CipherException e) {
-                    e.printStackTrace();
-                }
-            });
+
+            if (USE_NATIVE_JS) {
+                //Load credentials
+            } else {
+                executorService.execute(() -> {
+                    File file = ChorusTextUtils.createFileFromInputStream(ChorusApp.getInstance().getResources().openRawResource(R.raw.utc), "utc");
+                    try {
+                        credentials = WalletUtils.loadCredentials("1qaz2wsX@", file);
+                        EventBus.getDefault().post(new ShowMessageEvent("Credentials loaded"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (CipherException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
         }
         return instance;
     }
