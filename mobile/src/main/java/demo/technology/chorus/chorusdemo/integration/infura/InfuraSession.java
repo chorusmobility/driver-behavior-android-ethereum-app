@@ -1,5 +1,8 @@
 package demo.technology.chorus.chorusdemo.integration.infura;
 
+import demo.technology.chorus.chorusdemo.integration.infura.processor.JavaScriptWrapper;
+import demo.technology.chorus.chorusdemo.integration.infura.processor.RequestWrapper;
+import demo.technology.chorus.chorusdemo.integration.infura.processor.Web3jWrapper;
 import demo.technology.chorus.chorusdemo.interfaces.InfuraActions;
 import demo.technology.chorus.chorusdemo.model.RatingModel;
 import demo.technology.chorus.chorusdemo.model.UserModel;
@@ -16,7 +19,12 @@ public class InfuraSession extends InfuraBase {
     }
 
     protected static InfuraActions getInfuraProcessor() {
-        return USE_NATIVE_JS ? new JavaScriptWrapper() : new Web3jWrapper(executorService, web3j);
+        switch (INFURA_PROCESSOR_TYPE) {
+            case JS: return new JavaScriptWrapper(executorService);
+            case WEB3J: return new Web3jWrapper(executorService, web3j);
+            case RAW_REQUEST: return new RequestWrapper(executorService);
+            default: return new Web3jWrapper(executorService, web3j);
+        }
     }
 
     public static void createSession(UserModel account) {

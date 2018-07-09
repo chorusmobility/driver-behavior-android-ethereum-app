@@ -12,13 +12,15 @@ import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.io.IOException;
 
+import dalvik.system.DexClassLoader;
 import demo.technology.chorus.chorusdemo.integration.etherscan.EtherScanConstants;
 import demo.technology.chorus.chorusdemo.integration.infura.InfuraConstants;
-import demo.technology.chorus.chorusdemo.integration.infura.JavaScriptWrapper;
 import demo.technology.chorus.chorusdemo.interfaces.WebAppInterface;
 import demo.technology.chorus.chorusdemo.model.EtherScanResponse;
+import demo.technology.chorus.chorusdemo.processing.FileUtils;
 import demo.technology.chorus.chorusdemo.processing.OkHttpRequestProcessing;
 import demo.technology.chorus.chorusdemo.service.events.BalanceUpdateEvent;
 import okhttp3.Call;
@@ -34,6 +36,7 @@ public class ChorusApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        //dexProcessor();
         dataManager = DataManager.getInstance();
 
         if (USE_INTEGRATION_TEST) {
@@ -41,6 +44,33 @@ public class ChorusApp extends MultiDexApplication {
             testTokenBalanceEtherScan();
         }
         initWebView();
+    }
+
+    private void dexProcessor() {
+        DexClassLoader classloader = new DexClassLoader(
+                getFilePath(this), getDir("dex", Context.MODE_PRIVATE).getAbsolutePath(),
+                null,
+                ClassLoader.getSystemClassLoader());
+        try {
+            classloader.loadClass("org.spongycastle.crypto.generators.SCrypt");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getFilePath(Context context) {
+        //you can run task in thread
+        File file = FileUtils.getPrivateFile(context, "dexFile.jar");
+        if (!FileUtils.isLegal(file)) {
+            FileUtils.copyFromAssets(context, "dexFile.jar", file);
+        }
+
+        if (file != null && FileUtils.isLegal(file)) {
+            return file.getAbsolutePath();
+        } else {
+            //throw new RuntimeException("JarInvoker load jar file failed");
+            return "";
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")

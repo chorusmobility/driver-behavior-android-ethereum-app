@@ -1,4 +1,4 @@
-package demo.technology.chorus.chorusdemo.integration.infura;
+package demo.technology.chorus.chorusdemo.integration.infura.processor;
 
 import android.util.Log;
 
@@ -28,6 +28,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
 import demo.technology.chorus.chorusdemo.DataManager;
+import demo.technology.chorus.chorusdemo.integration.infura.IInfuraResponseListener;
+import demo.technology.chorus.chorusdemo.integration.infura.InfuraSession;
 import demo.technology.chorus.chorusdemo.interfaces.InfuraActions;
 import demo.technology.chorus.chorusdemo.model.RatingModel;
 import demo.technology.chorus.chorusdemo.service.events.BalanceUpdateEvent;

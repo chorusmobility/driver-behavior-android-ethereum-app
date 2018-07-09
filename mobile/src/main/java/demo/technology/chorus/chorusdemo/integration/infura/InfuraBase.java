@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import demo.technology.chorus.chorusdemo.DataManager;
+import demo.technology.chorus.chorusdemo.integration.infura.processor.InfuraProcessorType;
 import demo.technology.chorus.chorusdemo.interfaces.InfuraActions;
 import demo.technology.chorus.chorusdemo.model.RatingModel;
 import demo.technology.chorus.chorusdemo.model.UserModel;
@@ -32,8 +33,8 @@ import demo.technology.chorus.chorusdemo.model.UserModel;
 import static demo.technology.chorus.chorusdemo.integration.smartcontractintegration.SmartContractConstants.CONTRACT_ADDRESS_RINKEBY;
 
 public class InfuraBase {
-    
-    public static final boolean USE_NATIVE_JS = true;
+
+    public static final InfuraProcessorType INFURA_PROCESSOR_TYPE = InfuraProcessorType.WEB3J;
     protected static final BigInteger ACCOUNT_UNLOCK_DURATION = BigInteger.valueOf(30);
     protected static final String WALLET_PASSWORD = "1qaz2wsX@";
 
@@ -45,13 +46,13 @@ public class InfuraBase {
 
     protected static void initSession() {
         executorService = Executors.newCachedThreadPool();
-        if (!USE_NATIVE_JS) {
+        if (INFURA_PROCESSOR_TYPE == InfuraProcessorType.WEB3J) {
             web3j = buildWeb3j();
         }
     }
 
     protected static Web3j buildWeb3j() {
-        if (!USE_NATIVE_JS) {
+        if (INFURA_PROCESSOR_TYPE == InfuraProcessorType.WEB3J) {
             web3j = Web3jFactory.build(new HttpService(InfuraConstants.RINKEBY));
             executorService.execute(() -> {
                 try {
@@ -97,7 +98,7 @@ public class InfuraBase {
         return ethEstimateGas.getAmountUsed();
     }
 
-    protected static BigInteger getNonce(String address) throws ExecutionException, InterruptedException {
+    public static BigInteger getNonce(String address) throws ExecutionException, InterruptedException {
         EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
                 address, DefaultBlockParameterName.LATEST).sendAsync().get();
 
@@ -126,7 +127,7 @@ public class InfuraBase {
         return InfuraSession.isAlive;
     }
 
-    protected static boolean processIpfs(RatingModel model) {
+    public static boolean processIpfs(RatingModel model) {
 //            if (value) {
 //                postRatingResultIPFS(result, responseListener);
 //            }

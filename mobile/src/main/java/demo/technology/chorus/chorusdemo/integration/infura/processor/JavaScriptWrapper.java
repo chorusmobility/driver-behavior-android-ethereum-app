@@ -1,5 +1,8 @@
-package demo.technology.chorus.chorusdemo.integration.infura;
+package demo.technology.chorus.chorusdemo.integration.infura.processor;
 
+import java.util.concurrent.ExecutorService;
+
+import demo.technology.chorus.chorusdemo.integration.infura.IInfuraResponseListener;
 import demo.technology.chorus.chorusdemo.interfaces.InfuraActions;
 import demo.technology.chorus.chorusdemo.model.RatingModel;
 
@@ -10,6 +13,11 @@ Select More then Settings.
 Finally select Enable JavaScript.
 * */
 public class JavaScriptWrapper implements InfuraActions {
+    private ExecutorService executorService;
+
+    public JavaScriptWrapper(ExecutorService executorService) {
+        this.executorService = executorService;
+    }
 
     @Override
     public void initRideSession() {

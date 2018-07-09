@@ -28,6 +28,11 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        
+        <service android:name=".FileService"
+            android:isolatedProcess="true"
+            android:largeHeap="true"
+            android:process=":FileProcess"/>
 
         <activity
             android:name=".view.main.MapsActivity"
