@@ -69,11 +69,11 @@
             android:id="@+id/statContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="120dp"
+            android:minHeight="112dp"
             android:paddingBottom="53dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingTop="53dp"
+            android:paddingTop="23dp"
             tools:context="demo.technology.chorus.chorusdemo.view.main.MapsActivity" />
 
         <FrameLayout
@@ -85,10 +85,10 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="0dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="0dp"
                 android:max="100"
                 android:maxHeight="52dp"
                 android:minHeight="52dp"
