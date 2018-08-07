@@ -88,7 +88,7 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
                 .onPositive((dialog, which) -> dismissDialog())
                 .show();
 
-        InfuraSession.deposit(new IInfuraResponseListener() {
+        InfuraSession.initRideSession(new IInfuraResponseListener() {
             @Override
             public void waitForStringResponse(String response) {
                 dismissDialog();
@@ -114,6 +114,33 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
                 dismissDialog();
             }
         });
+
+//        InfuraSession.deposit(new IInfuraResponseListener() {
+//            @Override
+//            public void waitForStringResponse(String response) {
+//                dismissDialog();
+//
+//                if (!TextUtils.isEmpty(response) && response.length() > 2) {
+//                    ChorusBalanceActivity.this.runOnUiThread(() -> startActivity(new Intent(ChorusBalanceActivity.this, MapsActivity.class),
+//                            ActivityOptionsCompat.makeSceneTransitionAnimation(ChorusBalanceActivity.this,
+//                                    generatePairFromView(rainBowImageView),
+//                                    generatePairFromView(rainBowTextView),
+//                                    generatePairFromView(addressTextView)).toBundle()));
+//                } else {
+//                    EventBus.getDefault().post(new ShowMessageEvent("Deposit had not processed. Please check balance."));
+//                }
+//            }
+//
+//            @Override
+//            public void waitForBooleanResponse(Boolean response) {
+//                dismissDialog();
+//            }
+//
+//            @Override
+//            public void waitForBigIntResponse(BigInteger response) {
+//                dismissDialog();
+//            }
+//        });
 
     }
 
@@ -161,7 +188,7 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
         super.onResume();
         updateRatingUI();
         //INFURA INTEGRATION TEST REQUEST WITH ASKING FOR THE BALANCE
-        InfuraSession.createSession(DataManager.getInstance().getUserModel());
+        //InfuraSession.createSession(DataManager.getInstance().getUserModel());
 //        InfuraSession.getBalance(new IInfuraResponseListener() {
 //            @Override
 //            public void waitForStringResponse(String response) {

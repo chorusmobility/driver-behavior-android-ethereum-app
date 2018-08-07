@@ -53,8 +53,8 @@ public abstract class BaseAddressActivity extends FragmentActivity {
     public void openWalletRinkebyData() {
         try {
             startActivity(new Intent(Intent.ACTION_VIEW).setData(
-                    Uri.parse("https://rinkeby.etherscan.io/address/" + CONTRACT_ADDRESS_RINKEBY)));
-                    //Uri.parse("https://rinkeby.etherscan.io/token/" + ETHER_TOKEN_ADDRESS + "?a=" + DataManager.getInstance().getUserModel().getWallet().getAddress())));
+                    //Uri.parse("https://rinkeby.etherscan.io/address/" + CONTRACT_ADDRESS_RINKEBY)));
+                    Uri.parse("https://rinkeby.etherscan.io/token/" + ETHER_TOKEN_ADDRESS + "?a=" + DataManager.getInstance().getUserModel().getWallet().getAddress())));
         } catch (Exception e) {
             e.printStackTrace();
         }

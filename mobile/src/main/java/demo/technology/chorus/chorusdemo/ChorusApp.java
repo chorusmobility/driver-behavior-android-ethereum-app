@@ -77,7 +77,8 @@ public class ChorusApp extends MultiDexApplication {
 
     public void testTokenBalanceEtherScan() {
         if (dataManager != null && dataManager.getCredentials() != null) {
-            OkHttpRequestProcessing.runGet(EtherScanConstants.getEtherScanLink(dataManager.getCredentials().getAddress()), new Callback() {
+            //OkHttpRequestProcessing.runGet(EtherScanConstants.getEtherScanLink(dataManager.getCredentials().getAddress()), new Callback() {
+            OkHttpRequestProcessing.runGet(EtherScanConstants.getEtherTokenScanLink(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     Log.d("OkHttpException", "" + e.getMessage());
@@ -89,7 +90,9 @@ public class ChorusApp extends MultiDexApplication {
                     final EtherScanResponse etherScanResponse = new Gson().fromJson(responseBody, EtherScanResponse.class);
 
                     if (etherScanResponse != null) {
-                        EventBus.getDefault().post(new BalanceUpdateEvent(etherScanResponse.getResult()));
+
+                        //TODO: BEWARE of that 10^18 multiplier in case of using normal ERC20 token
+                        EventBus.getDefault().post(new BalanceUpdateEvent(1000000000000000000d * etherScanResponse.getResult()));
                         //EventBus.getDefault().post(new ShowMessageEvent("Screen is " + nameOfScreen()));
                     }
                 }

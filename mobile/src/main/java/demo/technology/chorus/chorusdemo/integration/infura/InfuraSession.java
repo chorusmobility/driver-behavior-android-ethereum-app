@@ -188,7 +188,7 @@ public class InfuraSession {
     }
 
     @Deprecated
-    public static void initRideSession() {
+    public static void initRideSession(final IInfuraResponseListener responseListener) {
 
         try {
             Function function = new Function("initDriverTrip",
@@ -198,8 +198,12 @@ public class InfuraSession {
             String data = FunctionEncoder.encode(function);
             Transaction transaction = Transaction.createEthCallTransaction(
                     DataManager.getInstance().getUserModel().getWallet().getAddress(), CONTRACT_ADDRESS_RINKEBY, data);
+            if (web3j == null) {
+                createSession();
+            }
             EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
             String value = ethCall.getValue();
+            responseListener.waitForStringResponse(value);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -246,9 +250,12 @@ public class InfuraSession {
             _amount = 1 - (Double.valueOf(1 - (result.getMainDriverRating() / 10.0)).longValue());
         }
         try {
+            if (_amount < 0) {
+                _amount = 1;
+            }
 
             Function function = new Function("withdraw",
-                    Arrays.<Type>asList(new Uint256(BigInteger.valueOf(_amount))),// * 1000000000 * 1000000000))),
+                    Arrays.<Type>asList(new Uint256(BigInteger.valueOf(_amount * 1000000000000000000L))),
                     Arrays.<TypeReference<?>>asList(new TypeReference<org.web3j.abi.datatypes.Bool>() {
                     }));
 
