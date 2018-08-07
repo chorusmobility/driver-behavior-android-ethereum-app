@@ -91,6 +91,7 @@ public abstract class BaseAddressFragment extends Fragment{
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ShowMessageEvent event) {
         SnackBarUtil.showSnackBarCustom(fragmentView.findViewById(R.id.coordinatorLayout), event.getEventText());
+
     }
 
     @Override

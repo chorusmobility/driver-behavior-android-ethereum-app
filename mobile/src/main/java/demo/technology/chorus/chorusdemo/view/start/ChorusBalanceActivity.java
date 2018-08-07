@@ -162,22 +162,23 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
         updateRatingUI();
         //INFURA INTEGRATION TEST REQUEST WITH ASKING FOR THE BALANCE
         InfuraSession.createSession(DataManager.getInstance().getUserModel());
-        InfuraSession.getBalance(new IInfuraResponseListener() {
-            @Override
-            public void waitForStringResponse(String response) {
-                //EventBus.getDefault().post(new ShowMessageEvent("Balance: " + response));
-            }
-
-            @Override
-            public void waitForBooleanResponse(Boolean response) {
-
-            }
-
-            @Override
-            public void waitForBigIntResponse(BigInteger response) {
-
-            }
-        });
+//        InfuraSession.getBalance(new IInfuraResponseListener() {
+//            @Override
+//            public void waitForStringResponse(String response) {
+//                //EventBus.getDefault().post(new ShowMessageEvent("Balance: " + response));
+//            }
+//
+//            @Override
+//            public void waitForBooleanResponse(Boolean response) {
+//
+//            }
+//
+//            @Override
+//            public void waitForBigIntResponse(BigInteger response) {
+//
+//            }
+//        });
+        ChorusApp.getInstance().testTokenBalanceEtherScan();
         InfuraSession.killSession();
     }
 

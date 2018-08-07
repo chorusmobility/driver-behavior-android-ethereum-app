@@ -45,6 +45,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import demo.technology.chorus.chorusdemo.BuildConfig;
+import demo.technology.chorus.chorusdemo.ChorusApp;
 import demo.technology.chorus.chorusdemo.DataManager;
 import demo.technology.chorus.chorusdemo.model.RatingModel;
 import demo.technology.chorus.chorusdemo.model.UserModel;
@@ -64,7 +65,7 @@ public class InfuraSession {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private static String IPFS_PROXY_URL = "https://ipfs.infura.io/ipfs/";
 
-    private static Web3j web3j;
+    private static volatile Web3j web3j;
     private static UserModel account;
     private static boolean isAlive;
     private static ExecutorService executorService;
@@ -90,14 +91,14 @@ public class InfuraSession {
         web3j = Web3jFactory.build(
                 new HttpService(InfuraConstants.RINKEBY));
 
-        executorService.execute(() -> {
-            try {
-                Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().send();
-                Log.d("WEB3ClientVersion", "WEB3ClientVersion: " + web3ClientVersion.getWeb3ClientVersion());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+//        executorService.execute(() -> {
+//            try {
+//                Web3ClientVersion web3ClientVersion = web3j.web3ClientVersion().send();
+//                Log.d("WEB3ClientVersion", "WEB3ClientVersion: " + web3ClientVersion.getWeb3ClientVersion());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        });
 
         return web3j;
     }
@@ -166,7 +167,8 @@ public class InfuraSession {
                         + hash);
 
                 responseListener.waitForStringResponse(hash);
-                getBalance(null);
+                //getBalance(null);
+                ChorusApp.getInstance().testTokenBalanceEtherScan();
             } catch (Exception e) {
                 Log.d("get balance failed:", e.getMessage(), e);
                 responseListener.waitForStringResponse(null);

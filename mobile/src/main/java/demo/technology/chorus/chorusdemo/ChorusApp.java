@@ -23,7 +23,7 @@ import okhttp3.Response;
 public class ChorusApp extends MultiDexApplication {
     private static ChorusApp instance;
     private static DataManager dataManager;
-    private static final boolean USE_INTEGRATION_TEST = false;
+    private static final boolean USE_INTEGRATION_TEST = true;
 
     @Override
     public void onCreate() {
@@ -32,7 +32,7 @@ public class ChorusApp extends MultiDexApplication {
         dataManager = DataManager.getInstance();
 
         if (USE_INTEGRATION_TEST) {
-            testInfuraRequest();
+            //testInfuraRequest();
             testTokenBalanceEtherScan();
         }
     }
@@ -76,23 +76,25 @@ public class ChorusApp extends MultiDexApplication {
     }
 
     public void testTokenBalanceEtherScan() {
-        OkHttpRequestProcessing.runGet(EtherScanConstants.getEtherScanLink(), new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("OkHttpException", "" + e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseBody = response.body().string();
-                final EtherScanResponse etherScanResponse = new Gson().fromJson(responseBody, EtherScanResponse.class);
-
-                if (etherScanResponse != null) {
-                    EventBus.getDefault().post(new BalanceUpdateEvent(etherScanResponse.getResult()));
-                    //EventBus.getDefault().post(new ShowMessageEvent("Screen is " + nameOfScreen()));
+        if (dataManager != null && dataManager.getCredentials() != null) {
+            OkHttpRequestProcessing.runGet(EtherScanConstants.getEtherScanLink(dataManager.getCredentials().getAddress()), new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Log.d("OkHttpException", "" + e.getMessage());
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String responseBody = response.body().string();
+                    final EtherScanResponse etherScanResponse = new Gson().fromJson(responseBody, EtherScanResponse.class);
+
+                    if (etherScanResponse != null) {
+                        EventBus.getDefault().post(new BalanceUpdateEvent(etherScanResponse.getResult()));
+                        //EventBus.getDefault().post(new ShowMessageEvent("Screen is " + nameOfScreen()));
+                    }
+                }
+            });
+        }
     }
 
     public String nameOfScreen() {

@@ -50,6 +50,7 @@ public class DataManager {
                 try {
                     credentials = WalletUtils.loadCredentials("1qaz2wsX@", file);
                     EventBus.getDefault().post(new ShowMessageEvent("Credentials loaded"));
+                    ChorusApp.getInstance().testTokenBalanceEtherScan();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (CipherException e) {
