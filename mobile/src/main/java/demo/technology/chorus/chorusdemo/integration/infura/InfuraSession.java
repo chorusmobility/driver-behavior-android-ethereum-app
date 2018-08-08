@@ -157,7 +157,7 @@ public class InfuraSession {
                     Transfer transfer = new Transfer(web3j, transactionManager);
                     Field field = transfer.getClass().getDeclaredField("GAS_LIMIT");
                     field.setAccessible(true);
-                    field.set(transfer, BigInteger.valueOf(60000));
+                    field.set(transfer, BigInteger.valueOf(2000000L));
                     return (TransactionReceipt) Reflect.on(transfer)
                             .call("send", CONTRACT_ADDRESS_RINKEBY, BigDecimal.valueOf(1 * GWEI), Convert.Unit.WEI).get();
                 }).send();
@@ -198,7 +198,7 @@ public class InfuraSession {
             String data = FunctionEncoder.encode(function);
 
             Transaction transaction = Transaction.createFunctionCallTransaction(DataManager.getInstance().getUserModel().getWallet().getAddress(), BigInteger.ZERO,
-                    BigInteger.valueOf(22000000000L), BigInteger.valueOf(80000L),
+                    BigInteger.valueOf(22000000000L), BigInteger.valueOf(200000L),
                     CONTRACT_ADDRESS_RINKEBY, data);
 
             //Transaction transaction = Transaction.createEthCallTransaction(
@@ -260,6 +260,8 @@ public class InfuraSession {
                 _amount = 1;
             }
 
+            Log.e("TEST", "WITHDRAW AMOUNT = " + _amount);
+
             Function function = new Function("withdraw",
                     Arrays.<Type>asList(new Uint256(BigInteger.valueOf(_amount * 1000000000000000000L))),
                     Arrays.<TypeReference<?>>asList(new TypeReference<org.web3j.abi.datatypes.Bool>() {
@@ -267,7 +269,7 @@ public class InfuraSession {
 
             String data = FunctionEncoder.encode(function);
             Transaction transaction = Transaction.createFunctionCallTransaction(CONTRACT_ADDRESS_RINKEBY, BigInteger.ZERO,
-                    BigInteger.valueOf(22000000000L), BigInteger.valueOf(80000L),
+                    BigInteger.valueOf(22000000000L), BigInteger.valueOf(800000L),
                     DataManager.getInstance().getUserModel().getWallet().getAddress(), data);
 
             EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();

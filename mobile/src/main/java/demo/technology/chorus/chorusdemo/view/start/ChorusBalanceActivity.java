@@ -89,39 +89,12 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
                 .onPositive((dialog, which) -> dismissDialog())
                 .show();
 
-        InfuraSession.initRideSession(new IInfuraResponseListener() {
-            @Override
-            public void waitForStringResponse(String response) {
-                dismissDialog();
-
-                Log.e("ETH TRANSACTION", "ETH RESULT " + response);
-
-                if (!TextUtils.isEmpty(response) && response.length() > 2) {
-                    ChorusBalanceActivity.this.runOnUiThread(() -> startActivity(new Intent(ChorusBalanceActivity.this, MapsActivity.class),
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(ChorusBalanceActivity.this,
-                                    generatePairFromView(rainBowImageView),
-                                    generatePairFromView(rainBowTextView),
-                                    generatePairFromView(addressTextView)).toBundle()));
-                } else {
-                    EventBus.getDefault().post(new ShowMessageEvent("Deposit had not processed. Please check balance."));
-                }
-            }
-
-            @Override
-            public void waitForBooleanResponse(Boolean response) {
-                dismissDialog();
-            }
-
-            @Override
-            public void waitForBigIntResponse(BigInteger response) {
-                dismissDialog();
-            }
-        });
-
-//        InfuraSession.deposit(new IInfuraResponseListener() {
+//        InfuraSession.initRideSession(new IInfuraResponseListener() {
 //            @Override
 //            public void waitForStringResponse(String response) {
 //                dismissDialog();
+//
+//                Log.e("ETH TRANSACTION", "ETH RESULT " + response);
 //
 //                if (!TextUtils.isEmpty(response) && response.length() > 2) {
 //                    ChorusBalanceActivity.this.runOnUiThread(() -> startActivity(new Intent(ChorusBalanceActivity.this, MapsActivity.class),
@@ -144,6 +117,34 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
 //                dismissDialog();
 //            }
 //        });
+
+        InfuraSession.createSession(DataManager.getInstance().getUserModel());
+        InfuraSession.deposit(new IInfuraResponseListener() {
+            @Override
+            public void waitForStringResponse(String response) {
+                dismissDialog();
+
+                if (!TextUtils.isEmpty(response) && response.length() > 2) {
+                    ChorusBalanceActivity.this.runOnUiThread(() -> startActivity(new Intent(ChorusBalanceActivity.this, MapsActivity.class),
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(ChorusBalanceActivity.this,
+                                    generatePairFromView(rainBowImageView),
+                                    generatePairFromView(rainBowTextView),
+                                    generatePairFromView(addressTextView)).toBundle()));
+                } else {
+                    EventBus.getDefault().post(new ShowMessageEvent("Deposit had not processed. Please check balance."));
+                }
+            }
+
+            @Override
+            public void waitForBooleanResponse(Boolean response) {
+                dismissDialog();
+            }
+
+            @Override
+            public void waitForBigIntResponse(BigInteger response) {
+                dismissDialog();
+            }
+        });
 
     }
 
