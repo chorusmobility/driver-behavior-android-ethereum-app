@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -92,6 +93,8 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
             @Override
             public void waitForStringResponse(String response) {
                 dismissDialog();
+
+                Log.e("ETH TRANSACTION", "ETH RESULT " + response);
 
                 if (!TextUtils.isEmpty(response) && response.length() > 2) {
                     ChorusBalanceActivity.this.runOnUiThread(() -> startActivity(new Intent(ChorusBalanceActivity.this, MapsActivity.class),

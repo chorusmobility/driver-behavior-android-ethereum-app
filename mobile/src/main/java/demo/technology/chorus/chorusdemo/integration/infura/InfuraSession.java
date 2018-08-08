@@ -196,8 +196,14 @@ public class InfuraSession {
                     Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {
                     }));
             String data = FunctionEncoder.encode(function);
-            Transaction transaction = Transaction.createEthCallTransaction(
-                    DataManager.getInstance().getUserModel().getWallet().getAddress(), CONTRACT_ADDRESS_RINKEBY, data);
+
+            Transaction transaction = Transaction.createFunctionCallTransaction(DataManager.getInstance().getUserModel().getWallet().getAddress(), BigInteger.ZERO,
+                    BigInteger.valueOf(22000000000L), BigInteger.valueOf(80000L),
+                    CONTRACT_ADDRESS_RINKEBY, data);
+
+            //Transaction transaction = Transaction.createEthCallTransaction(
+            //        DataManager.getInstance().getUserModel().getWallet().getAddress(), CONTRACT_ADDRESS_RINKEBY, data);
+
             if (web3j == null) {
                 createSession();
             }
