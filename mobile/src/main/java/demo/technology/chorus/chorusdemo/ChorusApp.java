@@ -92,7 +92,7 @@ public class ChorusApp extends MultiDexApplication {
                     if (etherScanResponse != null) {
 
                         //TODO: BEWARE of that 10^18 multiplier in case of using normal ERC20 token
-                        EventBus.getDefault().post(new BalanceUpdateEvent(1000000000000000000d * etherScanResponse.getResult()));
+                        EventBus.getDefault().post(new BalanceUpdateEvent(10000000000000000d * etherScanResponse.getResult()));
                         //EventBus.getDefault().post(new ShowMessageEvent("Screen is " + nameOfScreen()));
                     }
                 }

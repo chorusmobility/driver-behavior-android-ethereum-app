@@ -263,7 +263,7 @@ public class InfuraSession {
             Log.e("TEST", "WITHDRAW AMOUNT = " + _amount);
 
             Function function = new Function("withdraw",
-                    Arrays.<Type>asList(new Uint256(BigInteger.valueOf(_amount * 1000000000000000000L))),
+                    Arrays.<Type>asList(new Uint256(BigInteger.valueOf(_amount * 1000000000000000000L)), new org.web3j.abi.datatypes.Address(DataManager.getInstance().getUserModel().getWallet().getAddress())),
                     Arrays.<TypeReference<?>>asList(new TypeReference<org.web3j.abi.datatypes.Bool>() {
                     }));
 
