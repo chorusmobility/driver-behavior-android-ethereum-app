@@ -64,6 +64,10 @@ public class MapsActivity extends BaseLocationActivity {
         });
 
         showWaitingDialog();
+
+        //for the test purposes
+        //InfuraSession.killSession();
+        //closeActivity();
     }
 
     private void showWaitingDialog() {

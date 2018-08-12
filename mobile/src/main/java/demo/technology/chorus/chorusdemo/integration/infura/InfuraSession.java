@@ -14,10 +14,13 @@ import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
+import org.web3j.protocol.admin.Admin;
+import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
@@ -263,30 +266,78 @@ public class InfuraSession {
             Log.e("TEST", "WITHDRAW AMOUNT = " + _amount);
 
             Function function = new Function("withdraw",
-                    Arrays.<Type>asList(new Uint256(BigInteger.valueOf(_amount * 1000000000000000000L)), new org.web3j.abi.datatypes.Address(DataManager.getInstance().getUserModel().getWallet().getAddress())),
+                    Arrays.<Type>asList(new Uint256(BigInteger.valueOf(_amount * 100L)),
+                            new org.web3j.abi.datatypes.Address(DataManager.getInstance().getUserModel().getWallet().getAddress())),
                     Arrays.<TypeReference<?>>asList(new TypeReference<org.web3j.abi.datatypes.Bool>() {
                     }));
+//
+            EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
+                    CONTRACT_ADDRESS_RINKEBY, DefaultBlockParameterName.LATEST).sendAsync().get();
+            BigInteger nonce = ethGetTransactionCount.getTransactionCount();
 
             String data = FunctionEncoder.encode(function);
-            Transaction transaction = Transaction.createFunctionCallTransaction(CONTRACT_ADDRESS_RINKEBY, BigInteger.ZERO,
+            Transaction transaction = Transaction.createFunctionCallTransaction(CONTRACT_ADDRESS_RINKEBY, nonce,
                     BigInteger.valueOf(22000000000L), BigInteger.valueOf(800000L),
                     DataManager.getInstance().getUserModel().getWallet().getAddress(), data);
 
             EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
 
-            String response = ethCall.getValue().toString();
+            String response = ethCall.getValue();
             Log.i("Withdraw to wallet", "Response " + response);
 
-            //Consult return data processing with https://github.com/ethjava/web3j-sample/blob/bd04ba59ac77f3334eeef55eac7b76311e23e169/src/main/java/com/ethjava/TokenClient.java
-//            if (value) {
-//                postRatingResultIPFS(result, responseListener);
-//            }
             responseListener.waitForStringResponse(response);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+//
+//
+//            PersonalUnlockAccount personalUnlockAccount = ((Admin)web3j).personalUnlockAccount("0x000...", "1qaz2wsX@").sendAsync().get();
+//            if (personalUnlockAccount.accountUnlocked()) {
+//                // send a transaction
+//
+//                EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
+//
+//                String response = ethCall.getValue().toString();
+//                Log.i("Withdraw to wallet", "Response " + response);
+//
+//                responseListener.waitForStringResponse(response);
+//            } else {
+//                Log.i("Withdraw to wallet", "Account is not unlocked");
+//            }
+            //            Transaction.createFunctionCallTransaction(CONTRACT_ADDRESS_RINKEBY, BigInteger.ZERO,
+            //                    BigInteger.valueOf(22000000000L), BigInteger.valueOf(800000L),
+            //                    DataManager.getInstance().getUserModel().getWallet().getAddress(), data);
+
+            //RAW IMPLEMENTATION
+
+//            final long withdrawAmount = _amount;
+//            //try {
+//                final TransactionManager transactionManager = new RawTransactionManager(web3j, DataManager.getInstance().getCredentials());
+//
+//                TransactionReceipt transferReceipt = new RemoteCall<>(() -> {
+//                    Transfer transfer = new Transfer(web3j, transactionManager);
+//
+//                    Field field = transfer.getClass().getDeclaredField("GAS_LIMIT");
+//                    field.setAccessible(true);
+//                    field.set(transfer, BigInteger.valueOf(2000000L));
+//
+//                    return (TransactionReceipt) Reflect.on(transfer)
+//                            .call("withdraw", new Uint256(BigInteger.valueOf(withdrawAmount * 1000000000000000000L)),
+//                                    new org.web3j.abi.datatypes.Address(DataManager.getInstance().getUserModel().getWallet().getAddress())).get();
+//
+//                }).send();
+//
+//                String hash = transferReceipt.getTransactionHash();
+//                Log.i("Wallet Withdraw", "Transaction complete, view it at https://rinkeby.etherscan.io/tx/"
+//                        + hash);
+//
+//                responseListener.waitForStringResponse(hash);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static void postRatingResultIPFS(RatingModel result, IInfuraResponseListener responseListener) {

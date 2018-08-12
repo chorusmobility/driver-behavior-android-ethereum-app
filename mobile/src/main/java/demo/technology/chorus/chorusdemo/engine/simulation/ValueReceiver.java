@@ -16,6 +16,6 @@ public class ValueReceiver {
     }
 
     private static double generateNextDouble() {
-        return ThreadLocalRandom.current().nextDouble(2, 10);
+        return ThreadLocalRandom.current().nextDouble(7, 10);
     }
 }
