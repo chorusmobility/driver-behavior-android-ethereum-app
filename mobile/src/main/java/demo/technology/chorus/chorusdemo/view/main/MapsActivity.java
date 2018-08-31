@@ -3,6 +3,7 @@ package demo.technology.chorus.chorusdemo.view.main;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
@@ -43,31 +44,32 @@ public class MapsActivity extends BaseLocationActivity {
 
         //STOP TRIP
         //OPEN START SCREEN WITH DIALOG
-        InfuraSession.createSession(DataManager.getInstance().getUserModel());
-        InfuraSession.finishRideSession(DataManager.getInstance().getRatingModel(), new IInfuraResponseListener() {
-            @Override
-            public void waitForStringResponse(String response) {
-                InfuraSession.killSession();
-                closeActivity();
-            }
-
-            @Override
-            public void waitForBooleanResponse(Boolean response) {
-                InfuraSession.killSession();
-                closeActivity();
-            }
-
-            @Override
-            public void waitForBigIntResponse(BigInteger response) {
-
-            }
-        });
+//        InfuraSession.createSession(DataManager.getInstance().getUserModel());
+//        InfuraSession.finishRideSession(DataManager.getInstance().getRatingModel(), new IInfuraResponseListener() {
+//            @Override
+//            public void waitForStringResponse(String response) {
+//                InfuraSession.killSession();
+//                closeActivity();
+//            }
+//
+//            @Override
+//            public void waitForBooleanResponse(Boolean response) {
+//                InfuraSession.killSession();
+//                closeActivity();
+//            }
+//
+//            @Override
+//            public void waitForBigIntResponse(BigInteger response) {
+//
+//            }
+//        });
 
         showWaitingDialog();
 
         //for the test purposes
         //InfuraSession.killSession();
-        //closeActivity();
+        new Handler(getMainLooper()).postDelayed(() -> closeActivity(), 1500);
+
     }
 
     private void showWaitingDialog() {

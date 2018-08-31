@@ -162,7 +162,7 @@ public class InfuraSession {
                     field.setAccessible(true);
                     field.set(transfer, BigInteger.valueOf(2000000L));
                     return (TransactionReceipt) Reflect.on(transfer)
-                            .call("send", CONTRACT_ADDRESS_RINKEBY, BigDecimal.valueOf(1 * GWEI), Convert.Unit.WEI).get();
+                            .call("send", CONTRACT_ADDRESS_RINKEBY, BigDecimal.valueOf(1), Convert.Unit.WEI).get();
                 }).send();
 
                 String hash = transferReceipt.getTransactionHash();
@@ -232,6 +232,35 @@ public class InfuraSession {
                     DataManager.getInstance().getUserModel().getWallet().getAddress(), CONTRACT_ADDRESS_RINKEBY, data);
             EthCall ethCall = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).sendAsync().get();
             String value = ethCall.getValue();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void finishRide(IInfuraResponseListener responseListener) {
+        try {
+            long _amount = 1;
+            Function function = new Function("withdraw",
+                    Arrays.<Type>asList(new Uint256(BigInteger.valueOf(_amount))),
+                    Arrays.<TypeReference<?>>asList(new TypeReference<org.web3j.abi.datatypes.Bool>() {
+                    }));
+
+            String encodedFunction = FunctionEncoder.encode(function);
+            EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
+                    CONTRACT_ADDRESS_RINKEBY, DefaultBlockParameterName.LATEST).sendAsync().get();
+            BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+            Transaction transaction = Transaction.createFunctionCallTransaction(DataManager.getInstance().getUserModel().getWallet().getAddress(),
+                    nonce, BigInteger.valueOf(22000000000L), BigInteger.valueOf(800000L),
+                    DataManager.getInstance().getUserModel().getWallet().getAddress(), encodedFunction);
+
+            org.web3j.protocol.core.methods.response.EthSendTransaction transactionResponse =
+                    web3j.ethSendTransaction(transaction).sendAsync().get();
+
+            String transactionHash = transactionResponse.getTransactionHash();
+            Log.e("HASH", "THASH = " + transactionHash);
+            responseListener.waitForStringResponse(transactionHash);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

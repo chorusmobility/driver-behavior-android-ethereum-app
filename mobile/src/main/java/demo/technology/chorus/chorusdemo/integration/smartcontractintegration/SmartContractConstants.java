@@ -6,7 +6,9 @@ package demo.technology.chorus.chorusdemo.integration.smartcontractintegration;
 public class SmartContractConstants {
 
         public static String CONTRACT_ADDRESS_MAIN = "";
-        public static String CONTRACT_ADDRESS_RINKEBY = "0x0bf79c574EDeeDe2DabF5849cA46a755318493c2";
+        public static String CONTRACT_ADDRESS_RINKEBY = "0x584016990e0000C66ef0618f26672c9F22660484";
+        //"0x0bf79c574EDeeDe2DabF5849cA46a755318493c2";//"0xD08873ACcc13F8aF36399F8a5A7AA8828627bBd4";
+        //erc20 token sending "0x0bf79c574EDeeDe2DabF5849cA46a755318493c2";
         //"0x6fDF386092a6464cD0B676F0d959d473346d3323";
         // "0xA758087a3204d45360e651e73753E441521d6be0";//"0xE66D70d31cfC2A53177cDda5418B74Ee23B62fD2";
         // "0x008610345f7d64f9dCFBd8Cd8fdfEBD32308EA37";//"0xF74D92829bDc9B3bE591Fcdf20a58873370B4225";

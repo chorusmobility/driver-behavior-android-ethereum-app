@@ -106,6 +106,10 @@ public abstract class BaseAddressActivity extends FragmentActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ShowMessageEvent event) {
         SnackBarUtil.showSnackBarCustom(findViewById(R.id.coordinatorLayout), event.getEventText());
+        View view = findViewById(R.id.logo);
+        if (view != null) {
+            view.setVisibility(View.GONE);
+        }
     }
 
     @Override

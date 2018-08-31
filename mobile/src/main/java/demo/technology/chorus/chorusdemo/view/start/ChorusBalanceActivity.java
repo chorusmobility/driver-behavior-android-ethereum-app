@@ -211,6 +211,13 @@ public class ChorusBalanceActivity extends BaseAddressActivity {
 //        });
         ChorusApp.getInstance().testTokenBalanceEtherScan();
         InfuraSession.killSession();
+
+        if (DataManager.getInstance().getCredentials() != null) {
+            View view = findViewById(R.id.logo);
+            if (view != null) {
+                view.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void updateRatingUI() {
